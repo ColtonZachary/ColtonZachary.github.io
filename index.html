@@ -180,71 +180,10 @@ nav{
 .hero-app-row .hero-ctas{margin-top:0;flex-shrink:0}
 .hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
 .app-dl{display:flex;flex-direction:column;gap:10px}
-/* ── DOWNLOAD APP HEADLINE ── */
 .app-dl-label{
-  position:relative;
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:.38em;
-  text-transform:uppercase;
-  color:var(--y);
-  font-family:'Bebas Neue',sans-serif;
-  line-height:1;
-  
-  text-shadow:
-    0 0 12px rgba(240,201,58,.45),
-    0 0 30px rgba(240,201,58,.15);
-
-  animation:flickerGlow 3.5s ease-in-out infinite;
+  font-size:9px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);font-family:'JetBrains Mono',monospace;
 }
-
-/* animated accent line */
-.app-dl-label::after{
-  content:'';
-  position:absolute;
-  left:0;
-  bottom:-10px;
-  width:100%;
-  height:1px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(240,201,58,.9),
-      transparent
-    );
-
-  animation:scanLine 2.8s linear infinite;
-}
-
-/* subtle pulse */
-@keyframes flickerGlow{
-  0%,100%{
-    opacity:1;
-    transform:translateY(0);
-  }
-  50%{
-    opacity:.82;
-    transform:translateY(-1px);
-  }
-}
-
-/* moving scan line */
-@keyframes scanLine{
-  0%{
-    transform:translateX(-40%);
-    opacity:0;
-  }
-  30%{
-    opacity:1;
-  }
-  100%{
-    transform:translateX(40%);
-    opacity:0;
-  }
-}
-
 .app-dl-btn{
   display:inline-flex;align-items:center;gap:10px;
   background:rgba(255,255,255,.04);
@@ -773,7 +712,7 @@ footer{
     </div>
     <div class="app-divider"></div>
     <div class="app-dl">
-      <div class="app-dl-label">DOWNLOAD OUR APP</div>
+      <div class="app-dl-label">Also available on</div>
       <a href="https://apps.apple.com/us/app/lemonheads/id6444708582" class="app-dl-btn" target="_blank" rel="noopener">
         <div class="app-dl-icon">
           <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
