@@ -62,6 +62,7 @@ nav{
   transition:color .2s;cursor:pointer;font-family:'JetBrains Mono',monospace;
 }
 .nav-links a:hover{color:var(--y)}
+
 .nav-book{
   background:var(--y)!important;color:#000!important;
   padding:9px 22px;border-radius:4px;
@@ -100,7 +101,7 @@ nav{
   font-weight:700!important;font-size:13px;letter-spacing:.15em!important;
 }
 
-/* ── HERO ── */
+/* ── HERO ── */ 
 .hero{
   min-height:100svh;
   padding:calc(var(--nav) + 60px) 5% 80px;
@@ -850,6 +851,7 @@ footer{
     <li><a onclick="gohome('#how')">How It Works</a></li>
     <li><a onclick="gohome('#locations')">Locations</a></li>
     <li><a onclick="gohome('#packages')">Packages</a></li>
+    <li><a onclick="gohome('#addons')">Add-Ons</a></li>
     <li><a onclick="gohome('#gallery')">Gallery</a></li><li><a onclick="gohome('#reviews')">Reviews</a></li>
     <li><a onclick="gohome('#contact')">Contact</a></li>
     <li><a onclick="showPage('team')">Team</a></li>
@@ -862,6 +864,7 @@ footer{
   <a onclick="cm();gohome('#how')">How It Works</a>
   <a onclick="cm();gohome('#locations')">Locations</a>
   <a onclick="cm();gohome('#packages')">Packages</a>
+  <a onclick="cm();gohome('#addons')">Add-Ons</a>
   <a onclick="cm();gohome('#gallery')">Gallery</a><a onclick="cm();gohome('#reviews')">Reviews</a>
   <a onclick="cm();gohome('#contact')">Contact</a>
   <a onclick="cm();showPage('team')">Team</a>
@@ -930,15 +933,284 @@ footer{
 <section id="packages" class="packages-section">
   <div class="section-label">What We Offer</div>
   <div class="section-title">DETAIL PACKAGES</div>
-  <div class="pkg-grid">
-    <div class="pkg-card"><div class="pkg-name">Totally Basic</div><div class="pkg-desc">Quick, clean, and no-frills. Gets your exterior looking sharp in no time.</div><ul class="pkg-features"><li>Exterior hand wash & dry</li><li>Wheel & tire cleaning</li><li>Tire dressing</li><li>Window exterior clean</li></ul><button onclick="showPage('book')" class="pkg-cta">Book This</button></div>
-    <div class="pkg-card"><div class="pkg-name">Quickie</div><div class="pkg-desc">A speedy refresh inside and out — perfect when you need it done fast.</div><ul class="pkg-features"><li>Express exterior wash</li><li>Interior vacuum</li><li>Dashboard wipe-down</li><li>Window cleaning</li></ul><button onclick="showPage('book')" class="pkg-cta">Book This</button></div>
-    <div class="pkg-card featured"><div class="pkg-badge">Most Popular</div><div class="pkg-name">Fully Loaded</div><div class="pkg-desc">The full treatment — every inch detailed inside and out to showroom condition.</div><ul class="pkg-features"><li>Full exterior wash & dry</li><li>Interior deep clean & vacuum</li><li>Leather/upholstery treatment</li><li>Windows inside & out</li><li>Tire dressing & trim detail</li></ul><button onclick="showPage('book')" class="pkg-cta">Book This</button></div>
-    <div class="pkg-card"><div class="pkg-name">Boujee</div><div class="pkg-desc">The ultimate luxury experience. Top-tier products, top-tier results.</div><ul class="pkg-features"><li>Everything in Fully Loaded</li><li>Paint decontamination</li><li>Multi-stage machine polish</li><li>Premium sealant & wax</li><li>Swirl & scratch removal</li></ul><button onclick="showPage('book')" class="pkg-cta">Book This</button></div>
-    <div class="pkg-card"><div class="pkg-name">Interior</div><div class="pkg-desc">Full interior refresh — deep cleaned, vacuumed, and smelling brand new.</div><ul class="pkg-features"><li>Deep interior vacuum</li><li>All surface wipe-down</li><li>Leather/upholstery cleaning</li><li>Interior window cleaning</li><li>Odor treatment</li></ul><button onclick="showPage('book')" class="pkg-cta">Book This</button></div>
+
+  <!-- Vehicle type selector for pricing -->
+  <div style="margin-top:48px;margin-bottom:48px">
+    <div style="font-size:9px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:16px;text-align:center">Select your vehicle for pricing</div>
+    <div id="pkg-veh-selector" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px">
+      <button class="pkg-veh-btn active" onclick="setPkgVeh(this,'coupe')">2-Door Coupe</button>
+      <button class="pkg-veh-btn" onclick="setPkgVeh(this,'sedan')">4-Door Sedan</button>
+      <button class="pkg-veh-btn pkg-veh-suv" onclick="togglePkgSuv(this)">SUV ▾</button>
+      <button class="pkg-veh-btn" onclick="setPkgVeh(this,'truck')">Truck</button>
+      <button class="pkg-veh-btn" onclick="setPkgVeh(this,'van')">Van</button>
+    </div>
+    <!-- SUV sub-row, hidden until SUV is clicked -->
+    <div id="pkg-suv-sub" style="display:none;justify-content:center;gap:8px;margin-top:8px">
+      <button class="pkg-veh-subbtn" onclick="setPkgVeh(this,'suv2')">2-Row SUV</button>
+      <button class="pkg-veh-subbtn" onclick="setPkgVeh(this,'suv3')">3-Row SUV</button>
+    </div>
   </div>
+
+  <style>
+  .pkg-veh-subbtn{
+    background:rgba(240,201,58,.06);border:1px solid rgba(240,201,58,.25);
+    color:var(--y);font-size:10px;font-weight:700;
+    letter-spacing:.15em;text-transform:uppercase;
+    padding:7px 18px;border-radius:3px;cursor:pointer;
+    font-family:'JetBrains Mono',monospace;transition:all .2s;
+  }
+  .pkg-veh-subbtn:hover{background:rgba(240,201,58,.14)}
+  .pkg-veh-subbtn.active{background:rgba(240,201,58,.18);border-color:var(--y);box-shadow:0 0 0 1px var(--y)}
+  </style>
+
+  <style>
+  .pkg-veh-btn{
+    background:transparent;border:1px solid rgba(255,255,255,.12);
+    color:rgba(237,234,224,.45);font-size:10px;font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;
+    padding:9px 20px;border-radius:3px;cursor:pointer;
+    font-family:'JetBrains Mono',monospace;
+    transition:all .2s;
+  }
+  .pkg-veh-btn:hover{border-color:rgba(240,201,58,.4);color:var(--y)}
+  .pkg-veh-btn.active{background:rgba(240,201,58,.1);border-color:var(--y);color:var(--y)}
+  .pkg-price{
+    font-family:'Bebas Neue',sans-serif;font-size:38px;color:var(--y);
+    letter-spacing:.02em;line-height:1;margin-bottom:4px;
+    transition:opacity .15s;
+  }
+  .pkg-price-label{font-size:9px;color:var(--muted);letter-spacing:.15em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;margin-bottom:20px}
+  /* 7-col grid for 7 packages */
+  .pkg-grid{grid-template-columns:repeat(7,1fr)!important}
+  @media(max-width:1100px){.pkg-grid{grid-template-columns:repeat(4,1fr)!important}}
+  @media(max-width:800px){.pkg-grid{grid-template-columns:repeat(2,1fr)!important}}
+  </style>
+
+  <div class="pkg-grid">
+    <div class="pkg-card">
+      <div class="pkg-name">Totally Basic</div>
+      <div class="pkg-price" id="pp-basic">$129</div>
+      <div class="pkg-price-label">Starting price</div>
+      <div class="pkg-desc">Quick, clean, and no-frills. Gets your exterior looking sharp in no time.</div>
+      <ul class="pkg-features"><li>Exterior hand wash & dry</li><li>Wheel & tire cleaning</li><li>Tire dressing</li><li>Window exterior clean</li></ul>
+      <button onclick="showPage('book')" class="pkg-cta">Book This</button>
+    </div>
+    <div class="pkg-card">
+      <div class="pkg-name">Quickie</div>
+      <div class="pkg-price" id="pp-quickie">$69</div>
+      <div class="pkg-price-label">Starting price</div>
+      <div class="pkg-desc">A speedy refresh inside and out — perfect when you need it done fast.</div>
+      <ul class="pkg-features"><li>Express exterior wash</li><li>Interior vacuum</li><li>Dashboard wipe-down</li><li>Window cleaning</li></ul>
+      <button onclick="showPage('book')" class="pkg-cta">Book This</button>
+    </div>
+    <div class="pkg-card">
+      <div class="pkg-name">Toughy</div>
+      <div class="pkg-price" id="pp-toughy">$129</div>
+      <div class="pkg-price-label">Starting price</div>
+      <div class="pkg-desc">Built for the vehicles that need a little extra elbow grease.</div>
+      <ul class="pkg-features"><li>Heavy-duty exterior wash</li><li>Wheel & tire deep clean</li><li>Tire dressing</li><li>Bug & tar removal</li><li>Window exterior clean</li></ul>
+      <button onclick="showPage('book')" class="pkg-cta">Book This</button>
+    </div>
+    <div class="pkg-card featured">
+      <div class="pkg-badge">Most Popular</div>
+      <div class="pkg-name">Fully Loaded</div>
+      <div class="pkg-price" id="pp-fully">$209</div>
+      <div class="pkg-price-label">Starting price</div>
+      <div class="pkg-desc">The full treatment — every inch detailed inside and out to showroom condition.</div>
+      <ul class="pkg-features"><li>Full exterior wash & dry</li><li>Interior deep clean & vacuum</li><li>Leather/upholstery treatment</li><li>Windows inside & out</li><li>Tire dressing & trim detail</li></ul>
+      <button onclick="showPage('book')" class="pkg-cta">Book This</button>
+    </div>
+    <div class="pkg-card">
+      <div class="pkg-name">Boujee</div>
+      <div class="pkg-price" id="pp-boujee">$319</div>
+      <div class="pkg-price-label">Starting price</div>
+      <div class="pkg-desc">The ultimate luxury experience. Top-tier products, top-tier results.</div>
+      <ul class="pkg-features"><li>Everything in Fully Loaded</li><li>Paint decontamination</li><li>Multi-stage machine polish</li><li>Premium sealant & wax</li><li>Swirl & scratch removal</li></ul>
+      <button onclick="showPage('book')" class="pkg-cta">Book This</button>
+    </div>
+    <div class="pkg-card">
+      <div class="pkg-name">Interior Love</div>
+      <div class="pkg-price" id="pp-interior">$169</div>
+      <div class="pkg-price-label">Starting price</div>
+      <div class="pkg-desc">Full interior refresh — deep cleaned, vacuumed, and smelling brand new.</div>
+      <ul class="pkg-features"><li>Deep interior vacuum</li><li>All surface wipe-down</li><li>Leather/upholstery cleaning</li><li>Interior window cleaning</li><li>Odor treatment</li></ul>
+      <button onclick="showPage('book')" class="pkg-cta">Book This</button>
+    </div>
+  </div>
+
   <div style="margin-top:32px;text-align:center;border-top:1px solid var(--border);padding-top:32px"><button onclick="showPage('book')" class="btn-primary">View All Packages &amp; Book</button></div>
 </section>
+
+<!-- ADD-ONS SECTION -->
+<section id="addons" style="background:var(--dk);padding:80px 5%">
+  <div class="section-label">Enhance Your Detail</div>
+  <div class="section-title">ADD-ONS</div>
+  <div style="margin-top:48px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1px;background:var(--border)" id="addons-grid">
+
+    <div class="addon-card">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 12c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4"/><path d="M12 8v1m0 6v1m-4-4h1m6 0h1"/></svg>
+      </div>
+      <div class="addon-name">Shampoo</div>
+      <div class="addon-price">$50</div>
+      <div class="addon-desc">Deep carpet & upholstery shampoo treatment</div>
+    </div>
+
+    <div class="addon-card">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6l4 6-4 6M21 6l-4 6 4 6"/></svg>
+      </div>
+      <div class="addon-name">Steam Clean</div>
+      <div class="addon-price">$30</div>
+      <div class="addon-desc">High-pressure steam sanitizes surfaces & crevices</div>
+    </div>
+
+    <div class="addon-card">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+      </div>
+      <div class="addon-name">Pet Hair Removal</div>
+      <div class="addon-price">$50</div>
+      <div class="addon-desc">Full interior pet hair extraction & deodorize</div>
+    </div>
+
+    <div class="addon-card">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8M12 8v8"/></svg>
+      </div>
+      <div class="addon-name">Ozone Air Treatment</div>
+      <div class="addon-price">$70</div>
+      <div class="addon-desc">Eliminates odors at the molecular level</div>
+    </div>
+
+    <div class="addon-card">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      </div>
+      <div class="addon-name">Clay Bar</div>
+      <div class="addon-price">$50</div>
+      <div class="addon-desc">Removes bonded contaminants from paint surface</div>
+    </div>
+
+    <div class="addon-card">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12m0-10v6M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6m8 0h6M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24"/></svg>
+      </div>
+      <div class="addon-name">Child Seat Clean</div>
+      <div class="addon-price">$25 <span style="font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:.05em;opacity:.6">/ seat</span></div>
+      <div class="addon-desc">Thorough cleaning & sanitizing of child safety seats</div>
+    </div>
+
+    <div class="addon-card">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M3 12h3m12 0h3M12 3v3m0 12v3"/></svg>
+      </div>
+      <div class="addon-name">Headlight Restoration</div>
+      <div class="addon-price">$120</div>
+      <div class="addon-desc">Clears yellowed & hazy lenses to like-new clarity</div>
+    </div>
+
+    <div class="addon-card">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      </div>
+      <div class="addon-name">Additional Cleaning</div>
+      <div class="addon-price">$75</div>
+      <div class="addon-desc">Extra time for heavily soiled or oversized vehicles</div>
+    </div>
+
+    <div class="addon-card">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="addon-name">Engine Bay Clean</div>
+      <div class="addon-price">$75</div>
+      <div class="addon-desc">Degreased, cleaned & dressed engine compartment</div>
+    </div>
+
+    <div class="addon-card">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div class="addon-name">Ceramic Spray</div>
+      <div class="addon-price">$40</div>
+      <div class="addon-desc">Hydrophobic ceramic coating spray for lasting shine</div>
+    </div>
+
+  </div>
+  <style>
+  .addon-card{
+    background:var(--dk);padding:28px 24px;
+    transition:background .2s;position:relative;overflow:hidden;
+  }
+  .addon-card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--y),transparent);
+    transform:scaleX(0);transform-origin:left;transition:transform .35s ease;
+  }
+  .addon-card:hover{background:var(--card2)}
+  .addon-card:hover::before{transform:scaleX(1)}
+  .addon-icon{
+    width:36px;height:36px;color:var(--y);opacity:.65;margin-bottom:16px;
+  }
+  .addon-icon svg{width:100%;height:100%}
+  .addon-name{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.04em;margin-bottom:4px}
+  .addon-price{
+    font-family:'Bebas Neue',sans-serif;font-size:30px;color:var(--y);
+    letter-spacing:.02em;line-height:1;margin-bottom:10px;
+  }
+  .addon-desc{font-size:12px;color:rgba(237,234,224,.4);line-height:1.7;font-weight:400}
+  </style>
+  <div style="margin-top:32px;text-align:center;border-top:1px solid var(--border);padding-top:32px">
+    <p style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;letter-spacing:.1em;margin-bottom:20px">Add-ons can be requested during booking in the Special Requests field</p>
+    <button onclick="showPage('book')" class="btn-primary">Book & Add On →</button>
+  </div>
+</section>
+
+<script>
+// Pricing table: [coupe, sedan, suv2, suv3, truck, van]
+var PKG_PRICES={
+  'basic':  [129,139,149,169,169,169],
+  'quickie':[69, 69, 79, 79, 89, 79],
+  'toughy': [129,139,139,149,159,159],
+  'fully':  [209,219,229,249,249,259],
+  'boujee': [319,339,349,359,349,369],
+  'interior':[169,179,189,199,189,209]
+};
+var PKG_VEH_IDX=0;
+function setPkgVeh(btn,veh){
+  /* clear all top-level buttons */
+  document.querySelectorAll('.pkg-veh-btn').forEach(function(b){b.classList.remove('active')});
+  /* clear sub-buttons */
+  document.querySelectorAll('.pkg-veh-subbtn').forEach(function(b){b.classList.remove('active')});
+
+  /* if it's an SUV sub-button, keep the SUV parent highlighted */
+  if(veh==='suv2'||veh==='suv3'){
+    document.querySelector('.pkg-veh-suv').classList.add('active');
+    btn.classList.add('active');
+  } else {
+    btn.classList.add('active');
+    /* close SUV sub-row */
+    var sub=document.getElementById('pkg-suv-sub');
+    if(sub){sub.style.display='none';}
+    var suvBtn=document.querySelector('.pkg-veh-suv');
+    if(suvBtn){suvBtn.textContent='SUV ▾';}
+  }
+
+  var idx={coupe:0,sedan:1,suv2:2,suv3:3,truck:4,van:5}[veh];
+  PKG_VEH_IDX=idx;
+  Object.keys(PKG_PRICES).forEach(function(k){
+    var el=document.getElementById('pp-'+k);
+    if(el){
+      el.style.opacity='0';
+      setTimeout(function(){
+        el.textContent='$'+PKG_PRICES[k][idx];
+        el.style.opacity='1';
+      },120);
+    }
+  });
+}
+</script>
 
 <div style="height:1px;background:linear-gradient(90deg,var(--y) 0%,rgba(240,201,58,.1) 30%,transparent 70%);margin:0 5%"></div>
 <section class="gallery-section" id="gallery">
@@ -1092,22 +1364,143 @@ footer{
       <div class="service-grid">
         <div class="service-card" onclick="selSvc(this,'Totally Basic')"><div class="svc-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div><div class="service-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M9 16h6m-3-12v4M5 6a2 2 0 012-2h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6z"/></svg></div><div class="service-name">Totally Basic</div><div class="service-time">~2 hrs</div></div>
         <div class="service-card" onclick="selSvc(this,'Quickie')"><div class="svc-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div><div class="service-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="service-name">Quickie</div><div class="service-time">~1.5 hrs</div></div>
+        <div class="service-card" onclick="selSvc(this,'Toughy')"><div class="svc-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div><div class="service-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div><div class="service-name">Toughy</div><div class="service-time">~2.5 hrs</div></div>
         <div class="service-card" onclick="selSvc(this,'Fully Loaded')"><div class="svc-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div><div class="service-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></div><div class="service-name">Fully Loaded</div><div class="service-time">~3–4 hrs</div></div>
         <div class="service-card" onclick="selSvc(this,'Boujee')"><div class="svc-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div><div class="service-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/><path d="M2 9h20M6 3l-2 6m16-6l2 6M10 3L8 9l4 13M14 3l2 6-4 13"/></svg></div><div class="service-name">Boujee</div><div class="service-time">~4–5 hrs</div></div>
-        <div class="service-card" onclick="selSvc(this,'Interior')"><div class="svc-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div><div class="service-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16M4 10V6a2 2 0 012-2h12a2 2 0 012 2v4M4 10l-1 8h18l-1-8M8 18v3m8-3v3"/></svg></div><div class="service-name">Interior</div><div class="service-time">~2 hrs</div></div>
+        <div class="service-card" onclick="selSvc(this,'Interior Love')"><div class="svc-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div><div class="service-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16M4 10V6a2 2 0 012-2h12a2 2 0 012 2v4M4 10l-1 8h18l-1-8M8 18v3m8-3v3"/></svg></div><div class="service-name">Interior Love</div><div class="service-time">~2 hrs</div></div>
       </div>
     </div>
     <div class="form-section">
       <h2>Vehicle Type</h2>
-      <div class="vehicle-grid">
-        <div class="vehicle-card" onclick="selVeh(this,'Sedan')"><div class="vehicle-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 01-2-2v-4l2.5-5h13L19 11v4a2 2 0 01-2 2h-2m-8 0a2 2 0 104 0m4 0a2 2 0 104 0"/></svg></div><div class="vehicle-label">Sedan</div></div>
-        <div class="vehicle-card" onclick="selVeh(this,'SUV / Truck')"><div class="vehicle-icon-svg" style="width:64px;height:26px"><img src="images/truck.svg" style="width:100%;height:100%;object-fit:contain"></div><div class="vehicle-label">SUV / Truck</div></div>
-        <div class="vehicle-card" onclick="selVeh(this,'Van / Large')"><div class="vehicle-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22M7 4v16m5-16v6"/></svg></div><div class="vehicle-label">Van / Large</div></div>
-        <div class="vehicle-card" onclick="selVeh(this,'Sports Car')"><div class="vehicle-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14l2-6h16l2 6M2 14h20M2 14v4h2m16-4v4h-2m-14 0a2 2 0 104 0m6 0a2 2 0 104 0M6 8h12"/></svg></div><div class="vehicle-label">Sports Car</div></div>
+      <div class="vehicle-grid" id="veh-main-grid">
+        <div class="vehicle-card" onclick="selVeh(this,'2-Door Coupe','coupe')">
+          <div class="vehicle-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 14l3-7h14l3 7M2 14h20M2 14v4h2m16-4v4h-2m-14 0a2 2 0 104 0m6 0a2 2 0 104 0M7 7l2-4m8 4l-2-4"/></svg></div>
+          <div class="vehicle-label">2-Door Coupe</div>
+        </div>
+        <div class="vehicle-card" onclick="selVeh(this,'4-Door Sedan','sedan')">
+          <div class="vehicle-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 01-2-2v-4l2.5-5h13L19 11v4a2 2 0 01-2 2h-2m-8 0a2 2 0 104 0m4 0a2 2 0 104 0"/></svg></div>
+          <div class="vehicle-label">4-Door Sedan</div>
+        </div>
+        <div class="vehicle-card" id="veh-suv-card" onclick="showSuvRows()">
+          <div class="vehicle-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4h14l3 5h3a2 2 0 012 2v4h-2m-2 0H7m-4 0H3v-4M1 4v7m0 0h2"/><circle cx="6" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M1 11h18"/></svg></div>
+          <div class="vehicle-label">SUV</div>
+          <div id="veh-suv-hint" style="font-size:9px;font-family:'JetBrains Mono',monospace;color:rgba(240,201,58,.6);letter-spacing:.1em;margin-top:4px">TAP TO SELECT ROWS ▾</div>
+        </div>
+        <div class="vehicle-card" onclick="selVeh(this,'Truck','truck')">
+          <div class="vehicle-icon-svg" style="width:64px;height:26px"><img src="images/truck.svg" style="width:100%;height:100%;object-fit:contain"></div>
+          <div class="vehicle-label">Truck</div>
+        </div>
+        <div class="vehicle-card" onclick="selVeh(this,'Van','van')">
+          <div class="vehicle-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22M7 4v16m5-16v6"/></svg></div>
+          <div class="vehicle-label">Van</div>
+        </div>
+      </div>
+      <!-- SUV row sub-selection — slides in after tapping SUV -->
+      <div id="veh-suv-sub" style="display:none;margin-top:10px">
+        <div style="font-size:9px;font-family:'JetBrains Mono',monospace;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-bottom:10px">How many rows of seats?</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="vehicle-card" id="veh-suv2" onclick="selVeh(this,'SUV (2-Row)','suv2');selSuvRow('veh-suv2')">
+            <div class="vehicle-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4h14l3 5h3a2 2 0 012 2v4h-2m-2 0H7m-4 0H3v-4M1 4v7m0 0h2"/><circle cx="6" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M1 11h18"/></svg></div>
+            <div class="vehicle-label">2-Row SUV</div>
+            <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:rgba(237,234,224,.35);margin-top:4px">e.g. RAV4, CR-V, Equinox</div>
+          </div>
+          <div class="vehicle-card" id="veh-suv3" onclick="selVeh(this,'SUV (3-Row)','suv3');selSuvRow('veh-suv3')">
+            <div class="vehicle-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4h14l3 5h3a2 2 0 012 2v4h-2m-2 0H7m-4 0H3v-4M1 4v7m0 0h2"/><circle cx="6" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M1 11h18"/></svg></div>
+            <div class="vehicle-label">3-Row SUV</div>
+            <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:rgba(237,234,224,.35);margin-top:4px">e.g. Tahoe, Suburban, Expedition</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-section" id="addons-step">
+      <h2>Add-Ons <span style="font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.05em;color:var(--muted);text-transform:none">— Optional</span></h2>
+      <p style="font-size:12px;color:rgba(237,234,224,.35);font-family:'JetBrains Mono',monospace;letter-spacing:.06em;margin-bottom:24px">Tap any to add to your booking</p>
+      <div class="addon-pick-grid">
+        <div class="addon-pick" onclick="togAddon(this,'Shampoo',50)">
+          <div class="addon-pick-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="addon-pick-name">Shampoo</div>
+          <div class="addon-pick-price">+$50</div>
+        </div>
+        <div class="addon-pick" onclick="togAddon(this,'Steam Clean',30)">
+          <div class="addon-pick-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="addon-pick-name">Steam Clean</div>
+          <div class="addon-pick-price">+$30</div>
+        </div>
+        <div class="addon-pick" onclick="togAddon(this,'Pet Hair Removal',50)">
+          <div class="addon-pick-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="addon-pick-name">Pet Hair Removal</div>
+          <div class="addon-pick-price">+$50</div>
+        </div>
+        <div class="addon-pick" onclick="togAddon(this,'Ozone Air Treatment',70)">
+          <div class="addon-pick-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="addon-pick-name">Ozone Air Treatment</div>
+          <div class="addon-pick-price">+$70</div>
+        </div>
+        <div class="addon-pick" onclick="togAddon(this,'Clay Bar',50)">
+          <div class="addon-pick-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="addon-pick-name">Clay Bar</div>
+          <div class="addon-pick-price">+$50</div>
+        </div>
+        <div class="addon-pick" onclick="togAddon(this,'Child Seat Clean',25)">
+          <div class="addon-pick-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="addon-pick-name">Child Seat Clean</div>
+          <div class="addon-pick-price">+$25<span style="font-size:9px;opacity:.6">/seat</span></div>
+        </div>
+        <div class="addon-pick" onclick="togAddon(this,'Headlight Restoration',120)">
+          <div class="addon-pick-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="addon-pick-name">Headlight Restoration</div>
+          <div class="addon-pick-price">+$120</div>
+        </div>
+        <div class="addon-pick" onclick="togAddon(this,'Additional Cleaning',75)">
+          <div class="addon-pick-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="addon-pick-name">Additional Cleaning</div>
+          <div class="addon-pick-price">+$75</div>
+        </div>
+        <div class="addon-pick" onclick="togAddon(this,'Engine Bay Clean',75)">
+          <div class="addon-pick-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="addon-pick-name">Engine Bay Clean</div>
+          <div class="addon-pick-price">+$75</div>
+        </div>
+        <div class="addon-pick" onclick="togAddon(this,'Ceramic Spray',40)">
+          <div class="addon-pick-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="addon-pick-name">Ceramic Spray</div>
+          <div class="addon-pick-price">+$40</div>
+        </div>
+      </div>
+      <!-- Running total -->
+      <div id="addon-total-bar" style="display:none;margin-top:20px;padding:14px 18px;background:rgba(240,201,58,.06);border:1px solid rgba(240,201,58,.18);border-radius:4px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;color:var(--muted);text-transform:uppercase">Add-ons total</span>
+        <span id="addon-total-val" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--y);letter-spacing:.04em">$0</span>
       </div>
     </div>
     <div class="form-nav"><span class="progress-text">Step 1 of 4</span><button onclick="goSt(2)" class="btn-primary">Next: Schedule →</button></div>
   </div>
+
+  <style>
+  .addon-pick-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px}
+  .addon-pick{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:6px;padding:14px 16px;cursor:pointer;
+    display:flex;flex-direction:column;gap:6px;
+    position:relative;transition:background .2s,border-color .2s;
+    user-select:none;
+  }
+  .addon-pick:hover{background:var(--card2);border-color:rgba(240,201,58,.2)}
+  .addon-pick.selected{background:rgba(240,201,58,.08);border-color:var(--y)}
+  .addon-pick-check{
+    position:absolute;top:10px;right:10px;
+    width:18px;height:18px;border-radius:50%;
+    border:1px solid rgba(255,255,255,.15);
+    background:transparent;
+    display:flex;align-items:center;justify-content:center;
+    color:transparent;transition:all .2s;flex-shrink:0;
+  }
+  .addon-pick.selected .addon-pick-check{
+    background:var(--y);border-color:var(--y);color:#000;
+  }
+  .addon-pick-name{font-size:12px;font-weight:700;letter-spacing:.04em;padding-right:20px;line-height:1.3}
+  .addon-pick-price{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--y);letter-spacing:.04em;line-height:1}
+  </style>
 
   <div id="st2" style="display:none">
     <div class="form-section">
@@ -1162,9 +1555,31 @@ footer{
           <div class="summary-row"><span class="summary-label">Location</span><span class="summary-val" id="sl"></span></div>
           <div class="summary-row"><span class="summary-label">Name</span><span class="summary-val" id="sn"></span></div>
           <div class="summary-row"><span class="summary-label">Contact</span><span class="summary-val" id="sc"></span></div>
-          <div class="summary-row"><span class="summary-label">Due Today</span><span class="summary-val" style="color:var(--y)">$0.00 — Pay after service</span></div>
+          <div class="summary-row" id="saddon-row" style="display:none"><span class="summary-label">Add-Ons</span><span class="summary-val" id="saddon"></span></div>
         </div>
-        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-top:16px">By confirming, you agree to receive a confirmation text/email. Payment is collected after service via app or digital invoice.</p>
+
+        <!-- Price breakdown -->
+        <div style="margin-top:16px;border:1px solid rgba(240,201,58,.2);border-radius:6px;overflow:hidden">
+          <div style="padding:12px 16px;background:rgba(240,201,58,.04);border-bottom:1px solid rgba(240,201,58,.1)">
+            <div style="font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-family:'JetBrains Mono',monospace">Price Breakdown</div>
+          </div>
+          <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;justify-content:space-between;font-size:13px">
+              <span style="color:rgba(237,234,224,.5);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em">Package</span>
+              <span id="price-pkg" style="font-weight:600">—</span>
+            </div>
+            <div id="price-addon-row" style="display:none;justify-content:space-between;font-size:13px">
+              <span style="color:rgba(237,234,224,.5);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em">Add-Ons</span>
+              <span id="price-addon" style="font-weight:600"></span>
+            </div>
+            <div style="height:1px;background:rgba(255,255,255,.06)"></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <span style="font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;font-family:'JetBrains Mono',monospace;color:var(--y)">Estimated Total</span>
+              <span id="price-total" style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--y);letter-spacing:.03em;line-height:1">—</span>
+            </div>
+            <div style="font-size:10px;color:rgba(237,234,224,.3);font-family:'JetBrains Mono',monospace;letter-spacing:.04em;line-height:1.6">Collected after service via app or digital invoice. No charge today.</div>
+          </div>
+        </div>
       </div>
 
       <div class="card-section" style="margin-bottom:0">
@@ -1254,6 +1669,12 @@ document.getElementById('hbg').addEventListener('click',function(){
 function cm(){document.getElementById('hbg').classList.remove('open');document.getElementById('mmenu').classList.remove('open')}
 
 function goSt(n){
+  if(n===2){
+    if(!S.svc){showBookingErr('Please select a service before continuing.');return;}
+    if(!S.vehKey){showBookingErr('Please select a vehicle type before continuing.');return;}
+  }
+  if(n===3&&(!S.date||!S.time)){showBookingErr('Please select a date and time before continuing.');return;}
+  clearBookingErr();
   var cur=document.getElementById('st'+S.step)||document.getElementById('stok');
   if(cur)cur.style.display='none';
   S.step=n;
@@ -1263,6 +1684,17 @@ function goSt(n){
   if(n===4)fillSum();
   window.scrollTo(0,70);
 }
+function showBookingErr(msg){
+  var el=document.getElementById('booking-err');
+  if(!el){
+    el=document.createElement('div');el.id='booking-err';
+    el.style.cssText='margin-top:12px;padding:12px 16px;background:rgba(255,60,60,.08);border:1px solid rgba(255,60,60,.25);border-radius:4px;font-size:12px;font-family:JetBrains Mono,monospace;letter-spacing:.06em;color:#ff6b6b;line-height:1.6;';
+    var nav=document.querySelector('#st1 .form-nav');
+    if(nav)nav.parentNode.insertBefore(el,nav);
+  }
+  el.textContent='\u26a0 '+msg;el.style.display='block';
+}
+function clearBookingErr(){var el=document.getElementById('booking-err');if(el)el.style.display='none';}
 function updSI(a){
   for(var i=1;i<=4;i++){
     var el=document.getElementById('si'+i);
@@ -1277,9 +1709,45 @@ function selSvc(el,name){
   document.querySelectorAll('.service-card').forEach(function(c){c.classList.remove('selected')});
   el.classList.add('selected');S.svc=name;
 }
-function selVeh(el,name){
+function selVeh(el,name,key){
+  /* deselect all vehicle cards */
   document.querySelectorAll('.vehicle-card').forEach(function(c){c.classList.remove('selected')});
-  el.classList.add('selected');S.veh=name;
+  el.classList.add('selected');
+  S.veh=name;
+  S.vehKey=key||name.toLowerCase();
+}
+function showSuvRows(){
+  /* highlight the SUV parent card, show the sub-row */
+  document.querySelectorAll('.vehicle-card').forEach(function(c){c.classList.remove('selected')});
+  document.getElementById('veh-suv-card').classList.add('selected');
+  document.getElementById('veh-suv-sub').style.display='block';
+  S.veh=''; /* force them to pick a row */
+}
+function selSuvRow(id){
+  /* visually mark which sub-row was chosen; parent stays highlighted */
+  ['veh-suv2','veh-suv3'].forEach(function(i){
+    document.getElementById(i).classList.remove('selected');
+  });
+  document.getElementById(id).classList.add('selected');
+  document.getElementById('veh-suv-card').classList.add('selected');
+}
+
+/* ── PACKAGES PAGE — SUV toggle ── */
+function togglePkgSuv(btn){
+  var sub=document.getElementById('pkg-suv-sub');
+  var open=sub.style.display==='flex';
+  if(open){
+    sub.style.display='none';
+    btn.textContent='SUV ▾';
+    btn.classList.remove('active');
+  } else {
+    sub.style.display='flex';
+    btn.textContent='SUV ▴';
+    /* mark parent active, deselect others */
+    document.querySelectorAll('.pkg-veh-btn').forEach(function(b){b.classList.remove('active')});
+    btn.classList.add('active');
+    document.querySelectorAll('.pkg-veh-subbtn').forEach(function(b){b.classList.remove('active')});
+  }
 }
 function renderCal(){
   document.getElementById('cml').textContent=MO[cM]+' '+cY;
@@ -1454,6 +1922,28 @@ document.addEventListener('DOMContentLoaded',function(){
   if(ctEl){ctEl.addEventListener('blur',function(){if(S.date)renderTimes();});}
 });
 function gv(id){return document.getElementById(id)?document.getElementById(id).value:''}
+
+/* ── ADD-ONS STATE ── */
+var SELECTED_ADDONS={}; // { name: price }
+function togAddon(el,name,price){
+  if(SELECTED_ADDONS[name]){
+    delete SELECTED_ADDONS[name];
+    el.classList.remove('selected');
+  } else {
+    SELECTED_ADDONS[name]=price;
+    el.classList.add('selected');
+  }
+  var total=Object.values(SELECTED_ADDONS).reduce(function(a,b){return a+b},0);
+  var bar=document.getElementById('addon-total-bar');
+  var val=document.getElementById('addon-total-val');
+  if(total>0){
+    bar.style.display='flex';
+    val.textContent='$'+total;
+  } else {
+    bar.style.display='none';
+  }
+}
+
 function fillSum(){
   document.getElementById('ss').textContent=S.svc||'Not selected';
   document.getElementById('sv').textContent=(S.veh||'Not selected')+(gv('vi')?' — '+gv('vi'):'');
@@ -1461,10 +1951,79 @@ function fillSum(){
   document.getElementById('sl').textContent=(gv('lt')||'Not selected')+(gv('ad')?' · '+gv('ad')+', '+gv('ct'):'');
   document.getElementById('sn').textContent=(gv('fn')||'—')+' '+(gv('ln')||'');
   document.getElementById('sc').textContent=(gv('ph')||'—')+' · '+(gv('em')||'—');
+
+  /* Add-ons summary row */
+  var names=Object.keys(SELECTED_ADDONS);
+  var addonRow=document.getElementById('saddon-row');
+  var addonEl=document.getElementById('saddon');
+  if(names.length>0){
+    addonEl.textContent=names.join(', ');
+    addonRow.style.display='flex';
+  } else {
+    addonRow.style.display='none';
+  }
+
+  /* ── PRICE BREAKDOWN ── */
+  var SVC_KEY_MAP={
+    'Totally Basic':'basic','Quickie':'quickie','Toughy':'toughy',
+    'Fully Loaded':'fully','Boujee':'boujee','Interior Love':'interior'
+  };
+  var VEH_IDX_MAP={'coupe':0,'sedan':1,'suv2':2,'suv3':3,'truck':4,'van':5};
+
+  var svcKey=SVC_KEY_MAP[S.svc];
+  var vehIdx=VEH_IDX_MAP[S.vehKey];
+  var pkgPrice=(svcKey!==undefined && vehIdx!==undefined && PKG_PRICES[svcKey]) ? PKG_PRICES[svcKey][vehIdx] : null;
+  var addonTotal=Object.values(SELECTED_ADDONS).reduce(function(a,b){return a+b},0);
+
+  var pricePkgEl=document.getElementById('price-pkg');
+  var priceAddonRowEl=document.getElementById('price-addon-row');
+  var priceAddonEl=document.getElementById('price-addon');
+  var priceTotalEl=document.getElementById('price-total');
+
+  if(pkgPrice!==undefined && pkgPrice!==null){
+    pricePkgEl.textContent='$'+pkgPrice;
+    var total=pkgPrice+addonTotal;
+    priceTotalEl.textContent='$'+total;
+  } else {
+    pricePkgEl.textContent='—';
+    priceTotalEl.textContent='—';
+  }
+
+  if(addonTotal>0){
+    priceAddonEl.textContent='+$'+addonTotal;
+    priceAddonRowEl.style.display='flex';
+  } else {
+    priceAddonRowEl.style.display='none';
+  }
 }
 function confirm_booking(){
+  var SVC_KEY_MAP={
+    'Totally Basic':'basic','Quickie':'quickie','Toughy':'toughy',
+    'Fully Loaded':'fully','Boujee':'boujee','Interior Love':'interior'
+  };
+  var VEH_IDX_MAP={'coupe':0,'sedan':1,'suv2':2,'suv3':3,'truck':4,'van':5};
+  var svcKey=SVC_KEY_MAP[S.svc];
+  var vehIdx=VEH_IDX_MAP[S.vehKey];
+  var pkgPrice=(svcKey!==undefined && vehIdx!==undefined && PKG_PRICES[svcKey])?PKG_PRICES[svcKey][vehIdx]:null;
+  var addonTotal=Object.values(SELECTED_ADDONS).reduce(function(a,b){return a+b},0);
+  var grandTotal=pkgPrice!==null?pkgPrice+addonTotal:null;
+
   var rows=[['Service',S.svc||'—'],['Vehicle',S.veh||'—'],['Date',S.date||'—'],['Time',S.time||'—'],['Name',gv('fn')+' '+gv('ln')],['Phone',gv('ph')]];
-  var h='';rows.forEach(function(r){h+='<div class="confirm-row"><span class="confirm-row-label">'+r[0]+'</span><span class="confirm-row-val">'+r[1]+'</span></div>'});
+  var addonNames=Object.keys(SELECTED_ADDONS);
+  if(addonNames.length>0){
+    rows.push(['Add-Ons',addonNames.join(', ')]);
+  }
+  if(grandTotal!==null){
+    rows.push(['__total__','$'+grandTotal]);
+  }
+  var h='';
+  rows.forEach(function(r){
+    if(r[0]==='__total__'){
+      h+='<div class="confirm-row" style="border-top:1px solid rgba(240,201,58,.2);margin-top:8px;padding-top:14px"><span class="confirm-row-label" style="color:var(--y)">Total</span><span class="confirm-row-val" style="font-family:\'Bebas Neue\',sans-serif;font-size:28px;color:var(--y);letter-spacing:.03em">'+r[1]+'</span></div>';
+    } else {
+      h+='<div class="confirm-row"><span class="confirm-row-label">'+r[0]+'</span><span class="confirm-row-val">'+r[1]+'</span></div>';
+    }
+  });
   document.getElementById('cd').innerHTML=h;
   document.getElementById('st4').style.display='none';
   document.getElementById('stok').style.display='block';
