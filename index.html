@@ -1312,7 +1312,7 @@ function setPkgVeh(btn,veh){
     </div>
     -->
 
-    <div class="team-card">
+    <div class="team-card" data-role="detailer" data-name="Colton">
       <div class="team-photo-wrap has-bio" onclick="openBio('COLTON','Detailer','Hi Im Colton and my hobbies include riding and working on motorcycles, going to the gym and learning. I am going to UCO for Mechanical Engineering and Computer Science. I want to work for NASA or SpaceX after graduation.','colton-photo')">
         <img id="colton-photo" src="images/Colton.webp" alt="Colton">
       </div>
@@ -1502,6 +1502,44 @@ function setPkgVeh(btn,veh){
   .addon-pick-price{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--y);letter-spacing:.04em;line-height:1}
   </style>
 
+  <style>
+  /* ── DETAILER PICKER ── */
+  .detailer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+  .detailer-card{
+    background:var(--card);border:1px solid var(--border);
+    border-radius:8px;padding:20px 16px 18px;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    position:relative;transition:background .2s,border-color .2s;
+    text-align:center;user-select:none;
+  }
+  .detailer-card:hover{background:var(--card2);border-color:rgba(240,201,58,.2)}
+  .detailer-card.selected{background:rgba(240,201,58,.08);border-color:var(--y)}
+  .detailer-card-check{
+    position:absolute;top:10px;right:10px;
+    width:18px;height:18px;border-radius:50%;
+    border:1px solid rgba(255,255,255,.15);
+    background:transparent;
+    display:flex;align-items:center;justify-content:center;
+    color:transparent;transition:all .2s;
+  }
+  .detailer-card.selected .detailer-card-check{background:var(--y);border-color:var(--y);color:#000}
+  .detailer-photo{
+    width:64px;height:64px;border-radius:50%;
+    border:2px solid rgba(240,201,58,.2);
+    overflow:hidden;background:rgba(240,201,58,.05);
+    display:flex;align-items:center;justify-content:center;
+    transition:border-color .2s;flex-shrink:0;
+  }
+  .detailer-card:hover .detailer-photo,.detailer-card.selected .detailer-photo{border-color:rgba(240,201,58,.55)}
+  .detailer-photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .detailer-photo-placeholder{color:rgba(240,201,58,.25);display:flex;align-items:center;justify-content:center;width:100%;height:100%}
+  .detailer-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.06em;line-height:1;color:var(--text)}
+  /* No-preference card */
+  .detailer-card.nopref .detailer-photo{border-style:dashed;border-color:rgba(255,255,255,.1)}
+  .detailer-card.nopref .detailer-name{color:rgba(237,234,224,.4)}
+  .detailer-card.nopref.selected .detailer-name{color:var(--text)}
+  </style>
+
   <div id="st2" style="display:none">
     <div class="form-section">
       <h2>Pick a Date</h2>
@@ -1521,6 +1559,13 @@ function setPkgVeh(btn,veh){
   </div>
 
   <div id="st3" style="display:none">
+    <div class="form-section" id="detailer-step">
+      <h2>Choose Your Detailer <span style="font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.05em;color:var(--muted);text-transform:none">— Optional</span></h2>
+      <p style="font-size:12px;color:rgba(237,234,224,.35);font-family:'JetBrains Mono',monospace;letter-spacing:.06em;margin-bottom:24px">No preference? We'll assign the best available.</p>
+      <div class="detailer-grid" id="detailer-grid">
+        <!-- populated by buildDetailerPicker() -->
+      </div>
+    </div>
     <div class="form-section">
       <h2>Your Information</h2>
       <div class="form-row"><div class="form-group"><label>First Name</label><input type="text" placeholder="Jordan" id="fn"></div><div class="form-group"><label>Last Name</label><input type="text" placeholder="Smith" id="ln"></div></div>
@@ -1555,6 +1600,7 @@ function setPkgVeh(btn,veh){
           <div class="summary-row"><span class="summary-label">Location</span><span class="summary-val" id="sl"></span></div>
           <div class="summary-row"><span class="summary-label">Name</span><span class="summary-val" id="sn"></span></div>
           <div class="summary-row"><span class="summary-label">Contact</span><span class="summary-val" id="sc"></span></div>
+          <div class="summary-row" id="sdetailer-row"><span class="summary-label">Detailer</span><span class="summary-val" id="sdetailer">No preference</span></div>
           <div class="summary-row" id="saddon-row" style="display:none"><span class="summary-label">Add-Ons</span><span class="summary-val" id="saddon"></span></div>
         </div>
 
@@ -1648,7 +1694,7 @@ function setPkgVeh(btn,veh){
 </div>
 
 <script>
-var S={svc:'',veh:'',date:'',time:'',step:1};
+var S={svc:'',veh:'',date:'',time:'',detailer:'',step:1};
 var cY=2026,cM=4;
 var MO=['January','February','March','April','May','June','July','August','September','October','November','December'];
 
@@ -1951,6 +1997,7 @@ function fillSum(){
   document.getElementById('sl').textContent=(gv('lt')||'Not selected')+(gv('ad')?' · '+gv('ad')+', '+gv('ct'):'');
   document.getElementById('sn').textContent=(gv('fn')||'—')+' '+(gv('ln')||'');
   document.getElementById('sc').textContent=(gv('ph')||'—')+' · '+(gv('em')||'—');
+  document.getElementById('sdetailer').textContent=S.detailer||'No preference';
 
   /* Add-ons summary row */
   var names=Object.keys(SELECTED_ADDONS);
@@ -2008,7 +2055,7 @@ function confirm_booking(){
   var addonTotal=Object.values(SELECTED_ADDONS).reduce(function(a,b){return a+b},0);
   var grandTotal=pkgPrice!==null?pkgPrice+addonTotal:null;
 
-  var rows=[['Service',S.svc||'—'],['Vehicle',S.veh||'—'],['Date',S.date||'—'],['Time',S.time||'—'],['Name',gv('fn')+' '+gv('ln')],['Phone',gv('ph')]];
+  var rows=[['Service',S.svc||'—'],['Vehicle',S.veh||'—'],['Date',S.date||'—'],['Time',S.time||'—'],['Name',gv('fn')+' '+gv('ln')],['Phone',gv('ph')],['Detailer',S.detailer||'No preference']];
   var addonNames=Object.keys(SELECTED_ADDONS);
   if(addonNames.length>0){
     rows.push(['Add-Ons',addonNames.join(', ')]);
@@ -2057,6 +2104,63 @@ function fmtExp(el){
   if(v.length>=2) v=v.substring(0,2)+' / '+v.substring(2);
   el.value=v;
 }
+
+/* ── DETAILER PICKER ── */
+/* Reads any .team-card[data-role="detailer"] from the team grid */
+function buildDetailerPicker(){
+  var grid=document.getElementById('detailer-grid');
+  if(!grid)return;
+  grid.innerHTML='';
+
+  /* "No preference" option — always first */
+  var noPref=document.createElement('div');
+  noPref.className='detailer-card nopref selected';
+  noPref.dataset.detailer='';
+  noPref.innerHTML=
+    '<div class="detailer-card-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>'+
+    '<div class="detailer-photo detailer-photo-placeholder" style="border-style:dashed;border-color:rgba(255,255,255,.1)">'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>'+
+    '</div>'+
+    '<div class="detailer-name" style="color:rgba(237,234,224,.4);font-size:14px;letter-spacing:.04em;font-family:\'JetBrains Mono\',monospace">No preference</div>';
+  noPref.addEventListener('click',function(){selDetailer(noPref,'','')});
+  grid.appendChild(noPref);
+
+  /* Pull detailers from team page */
+  var cards=document.querySelectorAll('#team-grid .team-card[data-role="detailer"]');
+  cards.forEach(function(card){
+    var name=card.dataset.name||card.querySelector('.team-name').textContent.trim();
+    var imgEl=card.querySelector('img');
+    var imgSrc=imgEl?imgEl.src:'';
+
+    var dc=document.createElement('div');
+    dc.className='detailer-card';
+    dc.dataset.detailer=name;
+
+    var photoHTML='';
+    if(imgSrc){
+      photoHTML='<div class="detailer-photo"><img src="'+imgSrc+'" alt="'+name+'"></div>';
+    } else {
+      photoHTML='<div class="detailer-photo"><div class="detailer-photo-placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div></div>';
+    }
+
+    dc.innerHTML=
+      '<div class="detailer-card-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>'+
+      photoHTML+
+      '<div class="detailer-name">'+name.toUpperCase()+'</div>';
+
+    dc.addEventListener('click',function(){selDetailer(dc,name,imgSrc)});
+    grid.appendChild(dc);
+  });
+}
+
+function selDetailer(el,name,imgSrc){
+  document.querySelectorAll('.detailer-card').forEach(function(c){c.classList.remove('selected')});
+  el.classList.add('selected');
+  S.detailer=name;
+}
+
+/* Build picker when page loads and also when navigating to step 3 */
+document.addEventListener('DOMContentLoaded',buildDetailerPicker);
 
 </script>
 <!-- BIO MODAL -->
