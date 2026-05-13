@@ -76,6 +76,39 @@ nav{
   box-shadow:0 0 30px rgba(240,201,58,.3)!important;
   transform:translateY(-1px)!important;
 }
+
+/* ── DESKTOP MORE DROPDOWN ── */
+.nav-more{position:relative;display:flex;align-items:center}
+.nav-more-btn{
+  display:flex;align-items:center;gap:7px;
+  background:none;border:none;cursor:pointer;
+  color:#ffffff;font-size:11px;font-weight:600;
+  letter-spacing:.15em;text-transform:uppercase;
+  font-family:'JetBrains Mono',monospace;
+  transition:color .2s;padding:0;
+}
+.nav-more-btn:hover{color:var(--y)}
+.nav-more-btn:hover .nav-more-icon span{background:var(--y)}
+.nav-more-icon{display:flex;flex-direction:column;gap:4px}
+.nav-more-icon span{display:block;width:16px;height:1.5px;background:#fff;border-radius:2px;transition:background .2s}
+.nav-more-dropdown{
+  position:absolute;top:calc(100% + 16px);right:0;
+  background:rgba(8,8,8,.98);
+  border:1px solid rgba(240,201,58,.15);
+  min-width:200px;display:none;flex-direction:column;
+  box-shadow:0 12px 40px rgba(0,0,0,.6);z-index:1001;
+  backdrop-filter:blur(20px);
+}
+.nav-more:hover .nav-more-dropdown{display:flex}
+.nav-more-dropdown a{
+  text-decoration:none;color:rgba(237,234,224,.7);
+  font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.05);
+  cursor:pointer;transition:color .15s,background .15s;
+  font-family:'JetBrains Mono',monospace;display:block;
+}
+.nav-more-dropdown a:last-child{border-bottom:none}
+.nav-more-dropdown a:hover{color:var(--y);background:rgba(240,201,58,.04)}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none}
 .hamburger span{display:block;width:24px;height:1.5px;background:var(--y);border-radius:2px;transition:all .3s}
 .hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
@@ -848,14 +881,23 @@ footer{
     </div>
   </div>
   <ul class="nav-links">
-    <li><a onclick="gohome('#how')">How It Works</a></li>
-    <li><a onclick="gohome('#locations')">Locations</a></li>
     <li><a onclick="gohome('#packages')">Packages</a></li>
     <li><a onclick="gohome('#addons')">Add-Ons</a></li>
-    <li><a onclick="gohome('#gallery')">Gallery</a></li><li><a onclick="gohome('#reviews')">Reviews</a></li>
-    <li><a onclick="gohome('#contact')">Contact</a></li>
-    <li><a onclick="showPage('team')">Team</a></li>
     <li><a onclick="showPage('thelab')">The LAB</a></li>
+    <li class="nav-more">
+      <button class="nav-more-btn">
+        <div class="nav-more-icon"><span></span><span></span><span></span></div>
+        More
+      </button>
+      <div class="nav-more-dropdown">
+        <a onclick="gohome('#how')">How It Works</a>
+        <a onclick="gohome('#locations')">Locations</a>
+        <a onclick="gohome('#gallery')">Gallery</a>
+        <a onclick="gohome('#reviews')">Reviews</a>
+        <a onclick="gohome('#contact')">Contact</a>
+        <a onclick="showPage('team')">Team</a>
+      </div>
+    </li>
     <li><a onclick="showPage('book')" class="nav-book">Book Now</a></li>
   </ul>
   <button class="hamburger" id="hbg"><span></span><span></span><span></span></button>
