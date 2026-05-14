@@ -977,9 +977,29 @@ footer{
   <div class="section-label">Where We Serve</div>
   <div class="section-title">OUR LOCATIONS</div>
   <div class="locations-grid">
+
+    <!--
+    ═══════════════════════════════════════════════════
+    LOCATION CARDS
+    To add a new city, copy one <a> block below and update:
+      • href       → the city's Lemonheads landing page URL
+      • loc-name   → city name
+      • loc-state  → state name
+    ═══════════════════════════════════════════════════
+    -->
+
+    <!-- LOCATION CARD TEMPLATE (copy & fill in)
+    <a href="https://www.lemonheadsdetail.com/YOUR-CITY-URL" class="loc-card">
+      <div class="loc-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M9 21V7l6-4v18M9 9H6a1 1 0 00-1 1v11M15 9h3a1 1 0 011 1v11"/></svg></div>
+      <div class="loc-name">City Name</div>
+      <div class="loc-state">State</div>
+    </a>
+    -->
+
     <a href="https://www.lemonheadsdetail.com/okcmobiledetailing" class="loc-card"><div class="loc-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M9 21V7l6-4v18M9 9H6a1 1 0 00-1 1v11M15 9h3a1 1 0 011 1v11"/></svg></div><div class="loc-name">Oklahoma City</div><div class="loc-state">Oklahoma</div></a>
     <a href="https://www.lemonheadsdetail.com/tulsamobiledetailing" class="loc-card"><div class="loc-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M9 21V7l6-4v18M9 9H6a1 1 0 00-1 1v11M15 9h3a1 1 0 011 1v11"/></svg></div><div class="loc-name">Tulsa</div><div class="loc-state">Oklahoma</div></a>
     <a href="https://www.lemonheadsdetail.com/enid-oklahoma-car-mobile-detailing-services" class="loc-card"><div class="loc-icon-svg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M9 21V7l6-4v18M9 9H6a1 1 0 00-1 1v11M15 9h3a1 1 0 011 1v11"/></svg></div><div class="loc-name">Enid</div><div class="loc-state">Oklahoma</div></a>
+
   </div>
 </section>
 <section id="packages" class="packages-section">
@@ -1039,6 +1059,37 @@ footer{
   </style>
 
   <div class="pkg-grid">
+
+    <!--
+    ═══════════════════════════════════════════════════
+    PACKAGE CARDS
+    To add a new package:
+      1. Copy a .pkg-card block below and fill in the fields.
+      2. Add its pricing to PKG_PRICES in the <script> below:
+           'key': [coupe, sedan, suv2, suv3, truck, van]
+      3. Add a matching id="pp-key" to the .pkg-price element.
+      4. Add a matching entry to SVC_KEY_MAP in fillSum() and confirm_booking().
+      5. Add a matching .service-card in the booking form (step 1).
+    To feature a package (dark card + "Most Popular" badge):
+      • Add class="pkg-card featured" and include a .pkg-badge element.
+    ═══════════════════════════════════════════════════
+    -->
+
+    <!-- PACKAGE CARD TEMPLATE (copy & fill in)
+    <div class="pkg-card">
+      <div class="pkg-name">Package Name</div>
+      <div class="pkg-price" id="pp-KEY">$000</div>
+      <div class="pkg-price-label">Starting price</div>
+      <div class="pkg-desc">Short description of what this package covers.</div>
+      <ul class="pkg-features">
+        <li>Feature one</li>
+        <li>Feature two</li>
+        <li>Feature three</li>
+      </ul>
+      <button onclick="showPage('book')" class="pkg-cta">Book This</button>
+    </div>
+    -->
+
     <div class="pkg-card">
       <div class="pkg-name">Totally Basic</div>
       <div class="pkg-price" id="pp-basic">$129</div>
@@ -1093,11 +1144,41 @@ footer{
   <div style="margin-top:32px;text-align:center;border-top:1px solid var(--border);padding-top:32px"><button onclick="showPage('book')" class="btn-primary">View All Packages &amp; Book</button></div>
 </section>
 
-<!-- ADD-ONS SECTION -->
+<!-- ─────────────────────────────────────────────────────────────
+     ADD-ONS SECTION
+     Each .addon-card here is display-only (the homepage listing).
+     To add/remove an add-on you must update THREE places:
+       1. This section (visual display card below)
+       2. The .addon-pick-grid inside the booking form (step 1)
+       3. The PKG_PRICES / pricing logic does NOT need updating
+          since add-ons are priced separately via togAddon()
+───────────────────────────────────────────────────────────── -->
 <section id="addons" style="background:var(--dk);padding:80px 5%">
   <div class="section-label">Enhance Your Detail</div>
   <div class="section-title">ADD-ONS</div>
   <div style="margin-top:48px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1px;background:var(--border)" id="addons-grid">
+
+    <!--
+    ═══════════════════════════════════════════════════
+    ADD-ON DISPLAY CARDS
+    To add a new add-on, copy the template below AND add a
+    matching .addon-pick tile in the booking form (search for
+    "addon-pick-grid" to find it).
+    ═══════════════════════════════════════════════════
+    -->
+
+    <!-- ADD-ON CARD TEMPLATE (copy & fill in — also add to booking form!)
+    <div class="addon-card">
+      <div class="addon-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          YOUR SVG PATH HERE
+        </svg>
+      </div>
+      <div class="addon-name">Add-On Name</div>
+      <div class="addon-price">$00</div>
+      <div class="addon-desc">Short description of this add-on service.</div>
+    </div>
+    -->
 
     <div class="addon-card">
       <div class="addon-icon">
@@ -1221,6 +1302,19 @@ footer{
 
 <script>
 // Pricing table: [coupe, sedan, suv2, suv3, truck, van]
+/*
+ * ═══════════════════════════════════════════════════════════════
+ * PRICING TABLE
+ * Each key maps to a package. Values are prices by vehicle type:
+ *   Index: [coupe, sedan, suv2, suv3, truck, van]
+ *
+ * To add a new package:
+ *   1. Add a row here:  'key': [price, price, price, price, price, price]
+ *   2. Add id="pp-key" to the .pkg-price element in the packages section.
+ *   3. Add the key to SVC_KEY_MAP in both fillSum() and confirm_booking().
+ *   4. Add a .service-card in the booking form step 1.
+ * ═══════════════════════════════════════════════════════════════
+ */
 var PKG_PRICES={
   'basic':  [129,139,149,169,169,169],
   'quickie':[69, 69, 79, 79, 89, 79],
@@ -1269,6 +1363,20 @@ function setPkgVeh(btn,veh){
   <div class="section-label">Our Work</div>
   <div class="section-title">DETAILS THAT<br>SPEAK FOR THEMSELVES</div>
   <div class="gallery-grid">
+
+    <!--
+    ═══════════════════════════════════════════════════
+    GALLERY IMAGES
+    The grid uses a fixed 5-slot layout (gi-1 through gi-5).
+    To swap a photo, update the src="images/YOUR-FILE.webp" attribute.
+    Always use .webp for performance. Recommended sizes:
+      gi-1 (large left):  1400×760px
+      gi-2 (large right): 1000×760px
+      gi-3/4/5 (small):   800×520px
+    Always fill in a descriptive alt="" for accessibility.
+    ═══════════════════════════════════════════════════
+    -->
+
     <div class="gallery-item gi-1">
       <img src="images/gallery-6.webp" alt="Detail shop with cars under professional lighting">
     </div>
@@ -1284,6 +1392,7 @@ function setPkgVeh(btn,veh){
     <div class="gallery-item gi-5">
       <img src="images/gallery-4.webp" alt="Interior dashboard being cleaned with yellow cloth">
     </div>
+
   </div>
 </section>
 
@@ -1291,9 +1400,37 @@ function setPkgVeh(btn,veh){
   <div class="section-label">What People Say</div>
   <div class="section-title">CUSTOMER REVIEWS</div>
   <div class="reviews-grid">
+
+    <!--
+    ═══════════════════════════════════════════════════
+    REVIEW CARDS
+    To add a new review, copy the template below and fill in:
+      • review-text  → the customer quote (keep it in quotes)
+      • reviewer-avatar → 2-letter initials (first + last)
+      • reviewer-name   → customer's first name
+      • reviewer-loc    → City, State
+    Stars are always 5 — do not change.
+    ═══════════════════════════════════════════════════
+    -->
+
+    <!-- REVIEW CARD TEMPLATE (copy & fill in)
+    <div class="review-card">
+      <div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <p class="review-text">"Customer review text goes here."</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">AB</div>
+        <div>
+          <div class="reviewer-name">First Name</div>
+          <div class="reviewer-loc">City, State</div>
+        </div>
+      </div>
+    </div>
+    -->
+
     <div class="review-card"><div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="review-text">"Super convenient, great service, quality results. My husband's car had sunscreen smears and pine needles. Our cars look brand new."</p><div class="reviewer"><div class="reviewer-avatar">AL</div><div><div class="reviewer-name">Allison</div><div class="reviewer-loc">Dallas, TX</div></div></div></div>
     <div class="review-card"><div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="review-text">"10/10 every time! Paint correction made my car look incredible. Each detailer is kind, timely, and always above and beyond."</p><div class="reviewer"><div class="reviewer-avatar">AE</div><div><div class="reviewer-name">Allie</div><div class="reviewer-loc">Edmond, OK</div></div></div></div>
     <div class="review-card"><div class="stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div><p class="review-text">"My 10-year-old car looks brand new. They came to my house and detailed to perfection while I ran errands. Unreal."</p><div class="reviewer"><div class="reviewer-avatar">MA</div><div><div class="reviewer-name">Marci</div><div class="reviewer-loc">Wichita, KS</div></div></div></div>
+
   </div>
 </section>
 <section id="contact" class="contact-section">
@@ -1343,21 +1480,25 @@ function setPkgVeh(btn,veh){
 </div>
 <div class="team-container">
 
-  <!-- ─────────────────────────────────────────────
-       ADD EMPLOYEES BELOW.
-       Copy a .team-card block and fill in:
-         • team-name   → employee's name
-         • team-position → their title
-         • <img> src  → photo URL or file path
-       Remove the placeholder SVG once a photo is added.
-  ───────────────────────────────────────────── -->
+    <!--
+    ═══════════════════════════════════════════════════
+    EMPLOYEE CARDS
+    To add a new employee:
+      1. Copy the template block below and uncomment it.
+      2. Set data-role to either "detailer" or "Manager"
+           • "detailer" → appears in the booking detailer picker
+           • "Manager"  → team page only, NOT in booking picker
+      3. Set data-name to the employee's first name (used by picker).
+      4. Add their photo to images/ and update src="images/NAME.webp"
+      5. Update the openBio() call with their name, role, and bio text.
+      6. Give the <img> a unique id="name-photo" (used by bio modal).
+    ═══════════════════════════════════════════════════
+    -->
 
-  <div class="team-grid" id="team-grid">
-
-    <!-- EMPLOYEE CARD TEMPLATE (duplicate & fill in)
-    <div class="team-card">
-      <div class="team-photo-wrap">
-        <img src="YOUR_PHOTO_URL" alt="Name">
+    <!-- EMPLOYEE CARD TEMPLATE (copy, uncomment & fill in)
+    <div class="team-card" data-role="detailer" data-name="First Name">
+      <div class="team-photo-wrap has-bio" onclick="openBio('DISPLAY NAME','Position Title','Bio text goes here.','name-photo')">
+        <img id="name-photo" src="images/Name.webp" alt="Name">
       </div>
       <div class="team-name">FIRST LAST</div>
       <div class="team-position">Position Title</div>
@@ -1600,7 +1741,27 @@ function setPkgVeh(btn,veh){
       <h2>Add-Ons <span style="font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:400;letter-spacing:.05em;color:var(--muted);text-transform:none">— Optional</span></h2>
       <p style="font-size:12px;color:rgba(237,234,224,.35);font-family:'JetBrains Mono',monospace;letter-spacing:.06em;margin-bottom:24px">Tap any to add to your booking</p>
       <div class="addon-pick-grid">
-        <div class="addon-pick" onclick="togAddon(this,'Shampoo',50)">
+
+        <!--
+        ═══════════════════════════════════════════════════
+        BOOKING FORM — ADD-ON PICKER TILES
+        Each tile here mirrors an add-on card on the homepage.
+        To add a new add-on tile:
+          1. Copy the template below and fill in name and price.
+          2. The price ($) must match what's shown on the homepage.
+          3. Also add a matching display card in #addons-grid above.
+        togAddon(element, 'Name', price) tracks selected add-ons
+        and adds them to the booking total automatically.
+        ═══════════════════════════════════════════════════
+        -->
+
+        <!-- ADD-ON PICKER TILE TEMPLATE (copy & fill in)
+        <div class="addon-pick" onclick="togAddon(this,'Add-On Name',00)">
+          <div class="addon-pick-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>
+          <div class="addon-pick-name">Add-On Name</div>
+          <div class="addon-pick-price">+$00</div>
+        </div>
+        -->
           <div class="addon-pick-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>
           <div class="addon-pick-name">Shampoo</div>
           <div class="addon-pick-price">+$50</div>
@@ -2187,7 +2348,7 @@ function fillSum(){
     addonRow.style.display='none';
   }
 
-  /* ── PRICE BREAKDOWN ── */
+  /* Maps booking service name → PKG_PRICES key. Update when adding packages. */
   var SVC_KEY_MAP={
     'Totally Basic':'basic','Quickie':'quickie','Toughy':'toughy',
     'Fully Loaded':'fully','Boujee':'boujee','Interior Love':'interior'
@@ -2254,6 +2415,19 @@ function confirm_booking(){
   updSI(5);window.scrollTo(0,70);
 }
 /* ── DETAILER PICKER ── */
+/*
+ * ═══════════════════════════════════════════════════════════════
+ * DETAILER PICKER
+ * Dynamically builds the detailer selection UI in step 3 of
+ * the booking form by reading .team-card elements that have:
+ *   data-role="detailer"   → included in the picker
+ *   data-name="First Name" → display name on the card
+ *
+ * To add a new detailer to the picker:
+ *   Simply add a team card with data-role="detailer" on the
+ *   Team page — this function picks it up automatically.
+ * ═══════════════════════════════════════════════════════════════
+ */
 function buildDetailerPicker(){
   var grid=document.getElementById('detailer-grid');
   if(!grid)return;
