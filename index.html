@@ -587,7 +587,8 @@ footer{
   text-align:center;padding:10px 4px;border-radius:3px;
   border:1px solid transparent;cursor:pointer;
   font-size:13px;font-weight:600;transition:all .2s;color:rgba(237,234,224,.7);
-  font-family:'Syne',sans-serif;
+  font-family:'Syne',sans-serif;height:44px;
+  display:flex;align-items:center;justify-content:center;
 }
 .cal-day:hover:not(.disabled){border-color:rgba(240,201,58,.3);color:var(--y);background:rgba(240,201,58,.04)}
 .cal-day.selected{background:var(--y);color:#000;border-color:var(--y);font-weight:700}
@@ -956,7 +957,7 @@ footer{
       <div class="hero-stats">
         <div><div class="stat-num">3K+</div><div class="stat-label">Happy Customers</div></div>
         <div><div class="stat-num">5★</div><div class="stat-label">Avg. Rating</div></div>
-        <div><div class="stat-num">3</div><div class="stat-label">Cities Served</div></div>
+        <div><div class="stat-num">5</div><div class="stat-label">Cities Served</div></div>
       </div>
     </div>
     <div class="hero-photo">
@@ -1543,7 +1544,7 @@ function setPkgVeh(btn,veh){
       <div class="team-name">AUSTIN</div>
       <div class="team-position">Detailer/Wrap Specialist</div>
     </div>
-    
+
     <div class="team-card" data-role="detailer" data-name="Richard">
       <div class="team-photo-wrap has-bio" onclick="openBio('Richard','Detailer','I enjoy basketball, football, photography, and gaming. My goal is to stay healthy and be successful.','richard-photo')">
         <img id="richard-photo" src="images/Richard.webp" alt="Richard">
@@ -1770,6 +1771,7 @@ function setPkgVeh(btn,veh){
           <div class="addon-pick-price">+$00</div>
         </div>
         -->
+        <div class="addon-pick" onclick="togAddon(this,'Shampoo',50)">
           <div class="addon-pick-check"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="10" height="10"><polyline points="2,6 5,9 10,3"/></svg></div>
           <div class="addon-pick-name">Shampoo</div>
           <div class="addon-pick-price">+$50</div>
