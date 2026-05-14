@@ -1364,7 +1364,7 @@ function setPkgVeh(btn,veh){
     </div>
     -->
 
-    <div class="team-card">
+    <div class="team-card" data-role="detailer" data-name="Colton">
       <div class="team-photo-wrap has-bio" onclick="openBio('COLTON','Detailer','Hi Im Colton and my hobbies include riding and working on motorcycles, going to the gym and learning. I am going to UCO for Mechanical Engineering and Computer Science. I want to work for NASA or SpaceX after graduation.','colton-photo')">
         <img id="colton-photo" src="images/Colton.webp" alt="Colton">
       </div>
@@ -2248,7 +2248,7 @@ function buildDetailerPicker(){
   cards.forEach(function(card){
     var name=card.dataset.name||card.querySelector('.team-name').textContent.trim();
     var imgEl=card.querySelector('img');
-    var imgSrc=imgEl?imgEl.src:'';
+    var imgSrc=imgEl?imgEl.getAttribute('src'):'';
     var dc=document.createElement('div');
     dc.className='detailer-card';
     var photoHTML=imgSrc
