@@ -1518,7 +1518,7 @@ function setPkgVeh(btn,veh){
       <div class="team-bio-hint">View Bio</div>
     </div>
 
-    <div class="team-card" data-role="Manager" data-name="Gunner" onclick="openBio('GUNNER','Manager','Enjoys lifting, reading, and hanging out with his girlfriend','gunner-photo')">
+    <div class="team-card" data-role="Manager" data-name="Gunner" onclick="openBio('GUNNER','Manager','Enjoys lifting, reading, and hanging out with his girlfriend.','gunner-photo')">
       <div class="team-photo-wrap">
         <img id="gunner-photo" src="images/Gunner.webp" alt="Gunner">
       </div>
@@ -1829,6 +1829,42 @@ function setPkgVeh(btn,veh){
         <span id="addon-total-val" style="font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--y);letter-spacing:.04em">$0</span>
       </div>
     </div>
+    <!-- ── PREFERENCE QUESTIONS ── -->
+    <div class="form-section" id="pref-questions">
+      <h2>A Few Quick Questions</h2>
+      <p style="font-size:12px;color:rgba(237,234,224,.35);font-family:'JetBrains Mono',monospace;letter-spacing:.06em;margin-bottom:28px">Helps us tailor the detail to your preferences</p>
+
+      <!-- Q1: Plastic conditioning -->
+      <div style="margin-bottom:28px">
+        <p style="font-size:14px;color:rgba(237,234,224,.75);line-height:1.7;margin-bottom:14px;font-weight:500">Would you like your plastic to be conditioned? We understand some customers aren't fans of the shiny look and prefer the matte, clean look. If you'd like the shiny look, please select Yes.</p>
+        <div style="display:flex;gap:8px">
+          <button class="pref-btn active" id="pq1-no"  onclick="setPref('pq1','No',  this)">No</button>
+          <button class="pref-btn"        id="pq1-yes" onclick="setPref('pq1','Yes', this)">Yes</button>
+        </div>
+      </div>
+
+      <!-- Q2: Early contact -->
+      <div>
+        <p style="font-size:14px;color:rgba(237,234,224,.75);line-height:1.7;margin-bottom:14px;font-weight:500">Sometimes our detailers run ahead of schedule. Is it okay if they contact you for an earlier start time?</p>
+        <div style="display:flex;gap:8px">
+          <button class="pref-btn active" id="pq2-yes" onclick="setPref('pq2','Yes', this)">Yes</button>
+          <button class="pref-btn"        id="pq2-no"  onclick="setPref('pq2','No',  this)">No</button>
+        </div>
+      </div>
+    </div>
+
+    <style>
+    .pref-btn{
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+      color:rgba(237,234,224,.5);font-size:11px;font-weight:700;
+      letter-spacing:.18em;text-transform:uppercase;
+      padding:11px 28px;border-radius:3px;cursor:pointer;
+      font-family:'JetBrains Mono',monospace;transition:all .2s;
+    }
+    .pref-btn:hover{border-color:rgba(240,201,58,.35);color:var(--y)}
+    .pref-btn.active{background:rgba(240,201,58,.1);border-color:var(--y);color:var(--y)}
+    </style>
+
     <div class="form-nav"><span class="progress-text">Step 1 of 4</span><button onclick="goSt(2)" class="btn-primary">Next: Schedule →</button></div>
   </div>
 
@@ -1889,6 +1925,15 @@ function setPkgVeh(btn,veh){
   .detailer-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.06em;line-height:1;color:var(--text)}
   .detailer-card.nopref .detailer-name{color:rgba(237,234,224,.4);font-size:14px;letter-spacing:.04em;font-family:'JetBrains Mono',monospace}
   .detailer-card.nopref.selected .detailer-name{color:var(--text)}
+  .detailer-card.detailer-unavailable{
+    opacity:.32;filter:grayscale(.8);cursor:not-allowed!important;
+  }
+  .detailer-card.detailer-unavailable .detailer-name::after{
+    content:' — BOOKED';
+    font-size:8px;font-weight:700;letter-spacing:.1em;
+    font-family:'JetBrains Mono',monospace;
+    color:rgba(255,255,255,.35);
+  }
   </style>
 
   <div id="st2" style="display:none">
@@ -1951,6 +1996,8 @@ function setPkgVeh(btn,veh){
           <div class="summary-row"><span class="summary-label">Contact</span><span class="summary-val" id="sc"></span></div>
           <div class="summary-row"><span class="summary-label">Detailer</span><span class="summary-val" id="sdetailer">No preference</span></div>
           <div class="summary-row" id="saddon-row" style="display:none"><span class="summary-label">Add-Ons</span><span class="summary-val" id="saddon"></span></div>
+          <div class="summary-row"><span class="summary-label">Plastic Conditioning</span><span class="summary-val" id="spq1">No</span></div>
+          <div class="summary-row"><span class="summary-label">OK for Early Contact</span><span class="summary-val" id="spq2">Yes</span></div>
         </div>
 
         <!-- Price breakdown -->
@@ -2043,9 +2090,17 @@ function setPkgVeh(btn,veh){
 </div>
 
 <script>
-var S={svc:'',veh:'',date:'',time:'',detailer:'',step:1};
+var S={svc:'',veh:'',date:'',time:'',detailer:'',pq1:'No',pq2:'Yes',step:1};
 var cY=2026,cM=4;
 var MO=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function setPref(key,val,btn){
+  S[key]=val;
+  /* deselect sibling buttons in the same group */
+  var siblings=btn.parentElement.querySelectorAll('.pref-btn');
+  siblings.forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+}
 
 function showPage(p){
   document.querySelectorAll('.page').forEach(function(e){e.classList.remove('active')});
@@ -2103,6 +2158,9 @@ function updSI(a){
 function selSvc(el,name){
   document.querySelectorAll('.service-card').forEach(function(c){c.classList.remove('selected')});
   el.classList.add('selected');S.svc=name;
+  /* Duration changed — invalidate availability cache so slots re-check */
+  AVAIL_CACHE={};
+  if(S.date){renderTimes();}
 }
 function selVeh(el,name,key){
   /* deselect all vehicle cards */
@@ -2256,53 +2314,130 @@ function renderTimes(){
     return;
   }
 
-  getLocationRestriction(function(info){
-    g.innerHTML='';
+  /* Fetch availability for this date (cached per date) */
+  fetchAvailability(S.date, function(avail){
+    getLocationRestriction(function(info){
+      g.innerHTML='';
 
-    /* Determine whether the 8:30 AM-earliest rule applies:
-       - earlyOnly (60+ mi): earliest slot is 8:30 AM, BUT only if current time is past 8 PM the previous day
-       - isEnid: earliest slot is always 8:30 AM (no 8:00 AM) */
-    var restrict830=false;
-    var restrict830Msg='';
-
-    if(info.isEnid){
-      restrict830=true;
-      restrict830Msg='Enid bookings start at 8:30 AM.';
-    } else if(info.earlyOnly){
-      /* 30+ miles: block 8:00 AM only if it's currently past 8:00 PM (prior evening) */
-      var isPast8pm=now.getHours()>=20;
-      if(isPast8pm){
+      var restrict830=false;
+      var restrict830Msg='';
+      if(info.isEnid){
         restrict830=true;
-        restrict830Msg='Long-distance booking (30+ miles): earliest available time is 8:30 AM.';
+        restrict830Msg='Enid bookings start at 8:30 AM.';
+      } else if(info.earlyOnly){
+        var isPast8pm=now.getHours()>=20;
+        if(isPast8pm){
+          restrict830=true;
+          restrict830Msg='Long-distance booking (30+ miles): earliest available time is 8:30 AM.';
+        }
       }
+
+      ALL_SLOTS.forEach(function(t){
+        var el=document.createElement('div');el.className='time-slot';el.textContent=t;
+
+        var locationBlocked=(t==='8:00 AM'&&restrict830);
+        /* Fully booked = all detailers taken for this slot */
+        var fullyBooked=avail&&avail.fullyBooked&&avail.fullyBooked.indexOf(t)>-1;
+
+        if(locationBlocked||fullyBooked){
+          el.classList.add('unavailable');
+          el.title=fullyBooked?'All detailers booked at this time':'Not available for this location';
+          if(fullyBooked){
+            /* Extra visual label */
+            el.style.position='relative';
+            var tag=document.createElement('span');
+            tag.textContent='FULL';
+            tag.style.cssText='position:absolute;top:4px;right:5px;font-size:7px;font-weight:700;letter-spacing:.12em;font-family:\'JetBrains Mono\',monospace;color:rgba(255,255,255,.25);';
+            el.appendChild(tag);
+          }
+        } else {
+          el.addEventListener('click',function(){
+            document.querySelectorAll('.time-slot').forEach(function(s){s.classList.remove('selected')});
+            el.classList.add('selected');
+            S.time=t;
+            /* Reset detailer selection and update availability in picker */
+            S.detailer='';
+            applyDetailerAvailability(avail,t);
+          });
+        }
+        g.appendChild(el);
+      });
+
+      if(restrict830Msg){
+        var note=document.createElement('p');
+        note.style.cssText='color:rgba(240,201,58,.65);font-size:11px;font-family:\'JetBrains Mono\',monospace;letter-spacing:.06em;margin-top:14px;line-height:1.6;';
+        note.textContent='ⓘ '+restrict830Msg;
+        g.appendChild(note);
+      }
+    });
+  });
+}
+
+/* ── AVAILABILITY CACHE & FETCH ── */
+var AVAIL_CACHE={};  /* date string → availability object */
+
+function fetchAvailability(date, cb){
+  /* If no script URL set yet, skip — no availability data */
+  if(!APPS_SCRIPT_URL||APPS_SCRIPT_URL==='YOUR_APPS_SCRIPT_URL_HERE'){
+    return cb(null);
+  }
+  /* Return cached result if already fetched for this date */
+  if(AVAIL_CACHE[date]!==undefined){
+    return cb(AVAIL_CACHE[date]);
+  }
+  var url=APPS_SCRIPT_URL+'?action=availability&date='+encodeURIComponent(date)+'&duration='+(SVC_DURATION[S.svc]||2);
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(data){
+      AVAIL_CACHE[date]=data;
+      cb(data);
+    })
+    .catch(function(){
+      AVAIL_CACHE[date]=null; /* on error, don't block the UI */
+      cb(null);
+    });
+}
+
+/* ── GREY OUT UNAVAILABLE DETAILERS IN PICKER ── */
+/* Called when a time slot is selected */
+function applyDetailerAvailability(avail, timeSlot){
+  var grid=document.getElementById('detailer-grid');
+  if(!grid)return;
+
+  /* Detailers busy at this slot */
+  var busyList=(avail&&avail.busyBySlot&&avail.busyBySlot[timeSlot])||[];
+
+  var cards=grid.querySelectorAll('.detailer-card');
+  cards.forEach(function(card){
+    var nameEl=card.querySelector('.detailer-name');
+    if(!nameEl)return;
+    var name=nameEl.textContent.trim();
+
+    /* Auto-Assign card is always available */
+    if(card.classList.contains('nopref')){
+      card.classList.remove('detailer-unavailable');
+      card.style.pointerEvents='';
+      return;
     }
 
-    ALL_SLOTS.forEach(function(t){
-      var el=document.createElement('div');el.className='time-slot';el.textContent=t;
-
-      var isUnavailable=false;
-
-      /* Block 8:00 AM for Enid or 30+ mi locations (when past 8 PM) */
-      if(t==='8:00 AM'&&restrict830){isUnavailable=true;}
-
-      if(isUnavailable){
-        el.classList.add('unavailable');
-        el.title='Not available for this location';
-      } else {
-        el.addEventListener('click',function(){
-          document.querySelectorAll('.time-slot').forEach(function(s){s.classList.remove('selected')});
-          el.classList.add('selected');S.time=t;
-        });
-      }
-      g.appendChild(el);
+    /* Check if this detailer is in the busy list (case-insensitive) */
+    var isBusy=busyList.some(function(b){
+      return b.toLowerCase()===name.toLowerCase();
     });
 
-    /* Show restriction notice if applicable */
-    if(restrict830Msg){
-      var note=document.createElement('p');
-      note.style.cssText='color:rgba(240,201,58,.65);font-size:11px;font-family:\'JetBrains Mono\',monospace;letter-spacing:.06em;margin-top:14px;line-height:1.6;';
-      note.textContent='ⓘ '+restrict830Msg;
-      g.appendChild(note);
+    if(isBusy){
+      card.classList.add('detailer-unavailable');
+      card.style.pointerEvents='none';
+      /* If they were selected, clear the selection */
+      if(card.classList.contains('selected')){
+        card.classList.remove('selected');
+        /* Re-select Auto-Assign */
+        var noPref=grid.querySelector('.nopref');
+        if(noPref){noPref.classList.add('selected');S.detailer='';}
+      }
+    } else {
+      card.classList.remove('detailer-unavailable');
+      card.style.pointerEvents='';
     }
   });
 }
@@ -2347,6 +2482,8 @@ function fillSum(){
   document.getElementById('sn').textContent=(gv('fn')||'—')+' '+(gv('ln')||'');
   document.getElementById('sc').textContent=(gv('ph')||'—')+' · '+(gv('em')||'—');
   document.getElementById('sdetailer').textContent=S.detailer||'No preference';
+  document.getElementById('spq1').textContent=S.pq1||'No';
+  document.getElementById('spq2').textContent=S.pq2||'Yes';
 
   /* Add-ons summary row */
   var names=Object.keys(SELECTED_ADDONS);
@@ -2392,6 +2529,15 @@ function fillSum(){
     priceAddonRowEl.style.display='none';
   }
 }
+/* ── APPS SCRIPT URL — paste your deployed web app URL here ── */
+var APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+
+/* Service durations in hours */
+var SVC_DURATION={
+  'Totally Basic':2,'Quickie':1.5,'Toughy':2.5,
+  'Fully Loaded':3.5,'Boujee':4.5,'Interior Love':3
+};
+
 function confirm_booking(){
   var SVC_KEY_MAP={
     'Totally Basic':'basic','Quickie':'quickie','Toughy':'toughy',
@@ -2404,14 +2550,63 @@ function confirm_booking(){
   var addonTotal=Object.values(SELECTED_ADDONS).reduce(function(a,b){return a+b},0);
   var grandTotal=pkgPrice!==null?pkgPrice+addonTotal:null;
 
-  var rows=[['Service',S.svc||'—'],['Vehicle',S.veh||'—'],['Date',S.date||'—'],['Time',S.time||'—'],['Name',gv('fn')+' '+gv('ln')],['Phone',gv('ph')],['Detailer',S.detailer||'No preference']];
-  var addonNames=Object.keys(SELECTED_ADDONS);
-  if(addonNames.length>0){
-    rows.push(['Add-Ons',addonNames.join(', ')]);
-  }
-  if(grandTotal!==null){
-    rows.push(['__total__','$'+grandTotal]);
-  }
+  /* Show loading state */
+  var confirmBtn=document.querySelector('#st4 .btn-primary[onclick]');
+  if(confirmBtn){confirmBtn.textContent='Checking availability…';confirmBtn.disabled=true;}
+  clearBookingErr();
+
+  var payload={
+    customerName: gv('fn')+' '+gv('ln'),
+    phone:        gv('ph'),
+    email:        gv('em'),
+    service:      S.svc,
+    vehicle:      S.veh,
+    vehicleInfo:  gv('vi'),
+    date:         S.date,
+    time:         S.time,
+    duration:     SVC_DURATION[S.svc]||2,
+    location:     gv('lt')+(gv('ad')?' — '+gv('ad')+', '+gv('ct')+' '+gv('zp'):''),
+    requestedDetailer: S.detailer||'',
+    addons:       Object.keys(SELECTED_ADDONS).join(', '),
+    price:        grandTotal!==null?'$'+grandTotal:'TBD',
+    plasticCondition: S.pq1||'No',
+    earlyContact: S.pq2||'Yes',
+    notes:        gv('nt')
+  };
+
+  fetch(APPS_SCRIPT_URL,{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  })
+  .then(function(){
+    /* no-cors means we can't read the response body — treat success as confirmed */
+    showConfirmScreen(payload, grandTotal, 'Auto-Assigned');
+  })
+  .catch(function(err){
+    if(confirmBtn){confirmBtn.textContent='Confirm Booking';confirmBtn.disabled=false;}
+    showBookingErr('Connection error. Please try again or call us at 833-536-6648.');
+  });
+}
+
+function showConfirmScreen(payload, grandTotal, assignmentType){
+  var rows=[
+    ['Service',    payload.service||'—'],
+    ['Vehicle',    payload.vehicle+(payload.vehicleInfo?' — '+payload.vehicleInfo:'')],
+    ['Date',       payload.date||'—'],
+    ['Time',       payload.time||'—'],
+    ['Detailer',   payload.requestedDetailer||(assignmentType==='Auto-Assigned'?'Auto-Assigned':'—')],
+    ['Assignment', assignmentType],
+    ['Location',   payload.location||'—'],
+    ['Name',       payload.customerName||'—'],
+    ['Phone',      payload.phone||'—'],
+    ['Plastic Conditioning', payload.plasticCondition],
+    ['Early Contact OK',     payload.earlyContact]
+  ];
+  if(payload.addons){rows.push(['Add-Ons',payload.addons]);}
+  if(grandTotal!==null){rows.push(['__total__','$'+grandTotal]);}
+
   var h='';
   rows.forEach(function(r){
     if(r[0]==='__total__'){
@@ -2450,7 +2645,8 @@ function buildDetailerPicker(){
     '<div class="detailer-photo detailer-photo-placeholder" style="border-style:dashed;border-color:rgba(255,255,255,.1)">'+
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="width:28px;height:28px"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>'+
     '</div>'+
-    '<div class="detailer-name">No preference</div>';
+    '<div class="detailer-name">Auto-Assign</div>'+
+    '<div style="font-size:9px;font-family:\'JetBrains Mono\',monospace;color:rgba(237,234,224,.3);letter-spacing:.06em;margin-top:2px">Best available</div>';
   noPref.addEventListener('click',function(){selDetailer(noPref,'')});
   grid.appendChild(noPref);
   var cards=document.querySelectorAll('#team-grid .team-card[data-role="detailer"]');
