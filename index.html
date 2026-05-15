@@ -657,118 +657,77 @@ footer{
 .team-hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,8vw,96px);line-height:.95;letter-spacing:.02em}
 .team-hero h1 span{color:var(--y)}
 .team-hero p{color:rgba(237,234,224,.4);margin-top:14px;font-size:13px;font-family:'JetBrains Mono',monospace;letter-spacing:.08em}
-.team-container{max-width:1280px;margin:0 auto;padding:0 5% 100px}
+.team-container{max-width:1100px;margin:0 auto;padding:0 5% 100px}
 
-/* ── ROSTER GRID ── */
-.roster-grid{
+.team-grid{
   display:grid;
-  grid-template-columns:repeat(12,1fr);
-  grid-template-rows:360px 280px;
-  gap:3px;
+  grid-template-columns:repeat(3,1fr);
+  gap:2px;
+  background:var(--border);
   margin-top:8px;
 }
-/* 6-person asymmetric layout */
-.roster-card:nth-child(1){grid-column:1/6;grid-row:1/2}
-.roster-card:nth-child(2){grid-column:6/9;grid-row:1/2}
-.roster-card:nth-child(3){grid-column:9/13;grid-row:1/2}
-.roster-card:nth-child(4){grid-column:1/4;grid-row:2/3}
-.roster-card:nth-child(5){grid-column:4/8;grid-row:2/3}
-.roster-card:nth-child(6){grid-column:8/13;grid-row:2/3}
-
-.roster-card{
-  position:relative;overflow:hidden;cursor:pointer;
+.team-card{
   background:var(--card);
+  display:flex;flex-direction:column;
+  align-items:center;
+  text-align:center;
+  padding:48px 28px 40px;
+  position:relative;overflow:hidden;
+  transition:background .25s;
+  cursor:pointer;
 }
-/* gradient overlay */
-.roster-card::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(0deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.28) 45%,transparent 75%);
-  z-index:1;pointer-events:none;transition:background .45s;
-}
-.roster-card:hover::after{
-  background:linear-gradient(0deg,rgba(0,0,0,.93) 0%,rgba(0,0,0,.45) 55%,rgba(0,0,0,.1) 100%);
-}
-/* yellow bottom bar */
-.roster-card::before{
-  content:'';
-  position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:var(--y);z-index:3;
+.team-card:hover{background:var(--card2)}
+.team-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--y),transparent);
   transform:scaleX(0);transform-origin:left;
   transition:transform .4s ease;
 }
-.roster-card:hover::before{transform:scaleX(1)}
+.team-card:hover::before{transform:scaleX(1)}
 
-.roster-img{
-  position:absolute;inset:0;
-  width:100%;height:100%;
-  object-fit:cover;object-position:top center;
-  display:block;
-  transition:transform .65s ease,filter .5s;
-  filter:saturate(.65) brightness(.85);
-}
-.roster-card:hover .roster-img{
-  transform:scale(1.07);
-  filter:saturate(.8) brightness(.8);
-}
-
-/* big watermark number */
-.roster-num{
-  position:absolute;top:-10px;right:10px;
-  font-family:'Bebas Neue',sans-serif;
-  font-size:160px;line-height:1;
-  color:rgba(240,201,58,.055);
-  z-index:2;pointer-events:none;letter-spacing:-.02em;
-  transition:color .4s;user-select:none;
-}
-.roster-card:hover .roster-num{color:rgba(240,201,58,.1)}
-.roster-card:nth-child(1) .roster-num{font-size:220px}
-
-.roster-info{
-  position:absolute;bottom:0;left:0;right:0;
-  padding:22px 20px;z-index:2;
-}
-.roster-role{
-  font-size:9px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;
-  color:var(--y);font-family:'JetBrains Mono',monospace;
-  margin-bottom:6px;opacity:.9;line-height:1;
-}
-.roster-name{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(30px,3vw,46px);
-  line-height:.92;letter-spacing:.03em;color:#fff;
-}
-.roster-card:nth-child(1) .roster-name{font-size:clamp(42px,4.5vw,68px)}
-.roster-card:nth-child(1) .roster-info{padding:28px 26px}
-
-/* bio hint arrow */
-.roster-bio-hint{
-  display:inline-flex;align-items:center;gap:7px;
-  margin-top:10px;
-  font-size:9px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
-  color:rgba(240,201,58,0);font-family:'JetBrains Mono',monospace;
-  transition:color .3s .08s;
-}
-.roster-bio-hint span{
-  display:inline-block;width:20px;height:1px;
-  background:var(--y);opacity:0;transition:opacity .3s .08s,width .3s .08s;
-}
-.roster-card:hover .roster-bio-hint{color:rgba(240,201,58,.75)}
-.roster-card:hover .roster-bio-hint span{opacity:1;width:28px}
-
-/* no-photo fallback */
-.roster-placeholder{
-  position:absolute;inset:0;
+.team-photo-wrap{
+  width:120px;height:120px;border-radius:50%;
+  border:2px solid rgba(240,201,58,.2);
+  overflow:hidden;margin-bottom:24px;
+  background:rgba(240,201,58,.05);
   display:flex;align-items:center;justify-content:center;
-  background:var(--card);
+  position:relative;flex-shrink:0;
+  transition:border-color .25s,box-shadow .25s;
 }
-.roster-placeholder svg{width:52px;height:52px;color:rgba(240,201,58,.12)}
+.team-card:hover .team-photo-wrap{
+  border-color:rgba(240,201,58,.55);
+  box-shadow:0 0 28px rgba(240,201,58,.12);
+}
+.team-photo-wrap img{width:100%;height:100%;object-fit:cover;object-position:top center;display:block;transition:transform .4s ease,filter .3s}
+.team-card:hover .team-photo-wrap img{transform:scale(1.06);filter:brightness(.9)}
+.team-photo-placeholder{
+  width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  color:rgba(240,201,58,.2);
+}
+.team-photo-placeholder svg{width:48px;height:48px}
 
-/* legacy .team-card kept hidden — JS detailer picker reads from it */
-.team-grid{display:none}
-.team-card{display:none!important}
-.team-photo-wrap{display:none!important}
-.team-name{display:none!important}
-.team-position{display:none!important}
+.team-name{
+  font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:.08em;
+  color:var(--text);margin-bottom:8px;line-height:1;
+}
+.team-position{
+  font-size:9px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--y);font-family:'JetBrains Mono',monospace;opacity:.8;
+}
+/* "View bio" hint fades in on hover */
+.team-bio-hint{
+  margin-top:14px;
+  font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(240,201,58,0);font-family:'JetBrains Mono',monospace;
+  display:flex;align-items:center;gap:6px;
+  transition:color .25s;
+}
+.team-bio-hint::before{
+  content:'';display:inline-block;width:14px;height:1px;
+  background:var(--y);opacity:0;transition:opacity .25s;
+}
+.team-card:hover .team-bio-hint{color:rgba(240,201,58,.65)}
+.team-card:hover .team-bio-hint::before{opacity:1}
 
 .team-empty-note{
   text-align:center;padding:80px 20px;
@@ -778,27 +737,8 @@ footer{
 }
 .team-empty-note svg{width:36px;height:36px;color:rgba(240,201,58,.15);margin:0 auto 16px;display:block}
 
-/* ── RESPONSIVE ── */
-@media(max-width:1000px){
-  .roster-grid{
-    grid-template-columns:repeat(2,1fr);
-    grid-template-rows:repeat(3,280px);
-  }
-  .roster-card:nth-child(1){grid-column:1/3;grid-row:1/2}
-  .roster-card:nth-child(2){grid-column:1/2;grid-row:2/3}
-  .roster-card:nth-child(3){grid-column:2/3;grid-row:2/3}
-  .roster-card:nth-child(4){grid-column:1/2;grid-row:3/4}
-  .roster-card:nth-child(5){grid-column:2/3;grid-row:3/4}
-  .roster-card:nth-child(6){grid-column:1/3;grid-row:4/5}
-  .roster-card:nth-child(1) .roster-name{font-size:52px}
-}
-@media(max-width:560px){
-  .roster-grid{
-    grid-template-columns:1fr;
-    grid-template-rows:none;
-  }
-  .roster-card:nth-child(n){grid-column:1!important;grid-row:auto!important;height:250px}
-}
+@media(max-width:800px){.team-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.team-grid{grid-template-columns:1fr}}
 /* ── END TEAM PAGE ── */
 
 /* ── BIO MODAL ── */
@@ -1547,91 +1487,81 @@ function setPkgVeh(btn,veh){
 </div>
 <div class="team-container">
 
-  <!-- ═══════════════════════════════════════════════════
-       ROSTER CARDS — editorial photo-first layout
-       To add a new member: copy a .roster-card block and update:
-         • data-role  → "detailer" | "Manager"
-         • data-name  → first name (used by booking picker)
-         • img src / id  → photo path and unique id
-         • openBio()  → name, position, bio text, img id
-         • .roster-num  → sequential number
-       Adjust nth-child grid spans in CSS for 7+ members.
-  ═══════════════════════════════════════════════════ -->
+  <!--
+  ═══════════════════════════════════════════════════
+  EMPLOYEE CARDS — 3-column circle-photo grid
+  To add a new employee, copy a .team-card block and fill in:
+    • data-role  → "detailer" | "Manager"
+    • data-name  → first name (used by booking detailer picker)
+    • img src / id → photo path and unique id
+    • openBio()  → name, position, bio text, img id
+  ═══════════════════════════════════════════════════
+  -->
 
-  <!-- Invisible .team-card nodes — booking detailer picker reads from these -->
-  <div id="team-grid" style="display:none">
-    <div class="team-card" data-role="detailer" data-name="Colton"><img id="colton-photo" src="images/Colton.webp" alt="Colton"></div>
-    <div class="team-card" data-role="Manager"  data-name="Dave">  <img id="dave-photo"   src="images/Dave.webp"   alt="Dave"></div>
-    <div class="team-card" data-role="Manager"  data-name="Gunner"><img id="gunner-photo" src="images/Gunner.webp" alt="Gunner"></div>
-    <div class="team-card" data-role="detailer" data-name="Owen">  <img id="owen-photo"   src="images/Owen.webp"   alt="Owen"></div>
-    <div class="team-card" data-role="detailer" data-name="Austin"><img id="austin-photo" src="images/Austin.webp" alt="Austin"></div>
-    <div class="team-card" data-role="detailer" data-name="Richard"><img id="richard-photo" src="images/Richard.webp" alt="Richard"></div>
+  <div class="team-grid" id="team-grid">
+
+    <div class="team-card" data-role="detailer" data-name="Colton" onclick="openBio('COLTON','Detailer','Hi Im Colton and my hobbies include riding and working on motorcycles, going to the gym and learning. I am going to UCO for Mechanical Engineering and Computer Science. I want to work for NASA or SpaceX after graduation.','colton-photo')">
+      <div class="team-photo-wrap">
+        <img id="colton-photo" src="images/Colton.webp" alt="Colton">
+      </div>
+      <div class="team-name">COLTON</div>
+      <div class="team-position">Detailer</div>
+      <div class="team-bio-hint">View Bio</div>
+    </div>
+
+    <div class="team-card" data-role="Manager" data-name="Dave" onclick="openBio('DAVE','Manager','Former educator and Texas Transplant. I enjoy video games and making music in my free time. Dream car is a 70s Datsun 240z.','dave-photo')">
+      <div class="team-photo-wrap">
+        <img id="dave-photo" src="images/Dave.webp" alt="Dave">
+      </div>
+      <div class="team-name">DAVE</div>
+      <div class="team-position">Manager</div>
+      <div class="team-bio-hint">View Bio</div>
+    </div>
+
+    <div class="team-card" data-role="Manager" data-name="Gunner" onclick="openBio('GUNNER','Manager','No bio available.','gunner-photo')">
+      <div class="team-photo-wrap">
+        <img id="gunner-photo" src="images/Gunner.webp" alt="Gunner">
+      </div>
+      <div class="team-name">GUNNER</div>
+      <div class="team-position">Manager</div>
+      <div class="team-bio-hint">View Bio</div>
+    </div>
+
+    <div class="team-card" data-role="detailer" data-name="Owen" onclick="openBio('OWEN','Detailer','27. Enjoy spending time with family, playing video games, and cleaning cars.','owen-photo')">
+      <div class="team-photo-wrap">
+        <img id="owen-photo" src="images/Owen.webp" alt="Owen">
+      </div>
+      <div class="team-name">OWEN</div>
+      <div class="team-position">Detailer</div>
+      <div class="team-bio-hint">View Bio</div>
+    </div>
+
+    <div class="team-card" data-role="detailer" data-name="Austin" onclick="openBio('AUSTIN','Detailer / Wrap Specialist','No bio available.','austin-photo')">
+      <div class="team-photo-wrap">
+        <img id="austin-photo" src="images/Austin.webp" alt="Austin">
+      </div>
+      <div class="team-name">AUSTIN</div>
+      <div class="team-position">Detailer · Wrap Specialist</div>
+      <div class="team-bio-hint">View Bio</div>
+    </div>
+
+    <div class="team-card" data-role="detailer" data-name="Richard" onclick="openBio('RICHARD','Detailer','I enjoy basketball, football, photography, and gaming. My goal is to stay healthy and be successful.','richard-photo')">
+      <div class="team-photo-wrap">
+        <img id="richard-photo" src="images/Richard.webp" alt="Richard">
+      </div>
+      <div class="team-name">RICHARD</div>
+      <div class="team-position">Detailer</div>
+      <div class="team-bio-hint">View Bio</div>
+    </div>
+
+  </div><!-- /team-grid -->
+
+  <div class="team-empty-note" id="team-empty" style="display:none">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+    </svg>
+    Employee profiles coming soon.
   </div>
-
-  <!-- Visible roster grid -->
-  <div class="roster-grid">
-
-    <div class="roster-card" onclick="openBio('COLTON','Detailer','Hi Im Colton and my hobbies include riding and working on motorcycles, going to the gym and learning. I am going to UCO for Mechanical Engineering and Computer Science. I want to work for NASA or SpaceX after graduation.','colton-photo')">
-      <img class="roster-img" src="images/Colton.webp" alt="Colton">
-      <div class="roster-num">01</div>
-      <div class="roster-info">
-        <div class="roster-role">Detailer</div>
-        <div class="roster-name">COLTON</div>
-        <div class="roster-bio-hint"><span></span>View Bio</div>
-      </div>
-    </div>
-
-    <div class="roster-card" onclick="openBio('DAVE','Manager','Former educator and Texas Transplant. I enjoy video games and making music in my free time. Dream car is a 70s Datsun 240z.','dave-photo')">
-      <img class="roster-img" src="images/Dave.webp" alt="Dave">
-      <div class="roster-num">02</div>
-      <div class="roster-info">
-        <div class="roster-role">Manager</div>
-        <div class="roster-name">DAVE</div>
-        <div class="roster-bio-hint"><span></span>View Bio</div>
-      </div>
-    </div>
-
-    <div class="roster-card" onclick="openBio('GUNNER','Manager','No bio available.','gunner-photo')">
-      <img class="roster-img" src="images/Gunner.webp" alt="Gunner">
-      <div class="roster-num">03</div>
-      <div class="roster-info">
-        <div class="roster-role">Manager</div>
-        <div class="roster-name">GUNNER</div>
-        <div class="roster-bio-hint"><span></span>View Bio</div>
-      </div>
-    </div>
-
-    <div class="roster-card" onclick="openBio('OWEN','Detailer','27. Enjoy spending time with family, playing video games, and cleaning cars.','owen-photo')">
-      <img class="roster-img" src="images/Owen.webp" alt="Owen">
-      <div class="roster-num">04</div>
-      <div class="roster-info">
-        <div class="roster-role">Detailer</div>
-        <div class="roster-name">OWEN</div>
-        <div class="roster-bio-hint"><span></span>View Bio</div>
-      </div>
-    </div>
-
-    <div class="roster-card" onclick="openBio('AUSTIN','Detailer / Wrap Specialist','No bio available.','austin-photo')">
-      <img class="roster-img" src="images/Austin.webp" alt="Austin">
-      <div class="roster-num">05</div>
-      <div class="roster-info">
-        <div class="roster-role">Detailer · Wrap Specialist</div>
-        <div class="roster-name">AUSTIN</div>
-        <div class="roster-bio-hint"><span></span>View Bio</div>
-      </div>
-    </div>
-
-    <div class="roster-card" onclick="openBio('RICHARD','Detailer','I enjoy basketball, football, photography, and gaming. My goal is to stay healthy and be successful.','richard-photo')">
-      <img class="roster-img" src="images/Richard.webp" alt="Richard">
-      <div class="roster-num">06</div>
-      <div class="roster-info">
-        <div class="roster-role">Detailer</div>
-        <div class="roster-name">RICHARD</div>
-        <div class="roster-bio-hint"><span></span>View Bio</div>
-      </div>
-    </div>
-
-  </div><!-- /roster-grid -->
 
 </div><!-- /team-container -->
 <button onclick="showPage('home')" style="display:block;margin:0 auto 60px;background:none;border:none;color:var(--muted);font-size:11px;font-family:'JetBrains Mono',monospace;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;" onmouseover="this.style.color='var(--y)'" onmouseout="this.style.color='var(--muted)'">← Back to Home</button>
